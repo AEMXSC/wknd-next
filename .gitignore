@@ -32,3 +32,6 @@ yarn-error.log*
 # design hook cache
 /.impeccable/hook.cache.json
 tsconfig.tsbuildinfo
+
+.vercel
+.env*
