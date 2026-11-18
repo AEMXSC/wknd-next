@@ -7,7 +7,8 @@ import { aueResource } from '@/lib/cf-delivery';
 import { resolveTokens } from '@/lib/personalize';
 
 // Personalized hero, driven by one CTA Content Fragment whose copy carries
-// {{profile.*}} tokens. Visitors see the tokens resolved from the active Persona
+// {{profile.*}} tokens. Each persona audience gets its own CF variation (image
+// and copy); the page picks it, and UE edits that variation directly. Visitors see the tokens resolved from the active Persona
 // CF. Inside the Universal Editor iframe the raw tokens are shown instead, so an
 // author edits the template rather than overwriting it with one persona's values.
 export default function TripHero({
@@ -27,7 +28,12 @@ export default function TripHero({
   const show = (text: string) => (inEditor ? text : resolveTokens(text, active));
 
   return (
-    <section className="hero" data-aue-resource={aueResource(hero.path)} data-aue-type="component" data-aue-label="Trip hero (CTA)">
+    <section
+      className="hero"
+      data-aue-resource={aueResource(hero.path, hero.variation)}
+      data-aue-type="component"
+      data-aue-label={`Trip hero (${hero.variation})`}
+    >
       {hero.image ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img className="hero-img" src={hero.image} alt="" data-aue-prop="bannerimage" data-aue-type="media" data-aue-label="banner image" />

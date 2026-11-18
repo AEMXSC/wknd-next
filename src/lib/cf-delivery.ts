@@ -13,12 +13,15 @@ interface DeliveryField {
 }
 
 interface DeliveryItem {
+  id?: string;
+  name?: string;
   path?: string;
   title?: string;
   fields?: DeliveryField[];
 }
 
 export interface Fragment {
+  readonly id: string;
   readonly slug: string;
   readonly path: string;
   readonly title: string;
@@ -32,7 +35,22 @@ function flatten(item: DeliveryItem): Fragment {
   const fields: Record<string, string[]> = {};
   for (const f of item.fields ?? []) fields[f.name] = (f.values ?? []).map(String);
   const path = item.path ?? '';
-  return { slug: path.split('/').pop() ?? '', path, title: item.title ?? '', fields };
+  return { id: item.id ?? '', slug: path.split('/').pop() ?? '', path, title: item.title ?? '', fields };
+}
+
+function authHeaders(config: AemConfig): Record<string, string> {
+  const headers: Record<string, string> = { accept: 'application/json' };
+  if (config.token) headers.authorization = `Bearer ${config.token}`;
+  return headers;
+}
+
+/** The named variations of one fragment (master is not included). */
+async function listVariations(config: AemConfig, id: string): Promise<DeliveryItem[]> {
+  const url = `${config.publish}/adobe/sites/cf/fragments/${id}/variations?ts=${Date.now()}`;
+  const res = await fetch(url, { headers: authHeaders(config), cache: 'no-store' });
+  if (!res.ok) throw new Error(`[cf-delivery] variations of "${id}" returned HTTP ${res.status}`);
+  const json = (await res.json()) as { items?: DeliveryItem[] };
+  return Array.isArray(json.items) ? json.items : [];
 }
 
 /** List the content fragments directly under a DAM folder. */
@@ -41,10 +59,7 @@ export async function listFragments(config: AemConfig, folder: string): Promise<
   // ?ts= busts the AEM CDN cache so a freshly published fragment shows on the
   // next read (same technique the persisted-query client uses).
   const url = `${config.publish}/adobe/sites/cf/fragments?path=${folder}&ts=${Date.now()}`;
-  const headers: Record<string, string> = { accept: 'application/json' };
-  if (config.token) headers.authorization = `Bearer ${config.token}`;
-
-  const res = await fetch(url, { headers, cache: 'no-store' });
+  const res = await fetch(url, { headers: authHeaders(config), cache: 'no-store' });
   if (!res.ok) throw new Error(`[cf-delivery] "${folder}" returned HTTP ${res.status}`);
   const json = (await res.json()) as { items?: DeliveryItem[] };
   const items = Array.isArray(json.items) ? json.items : [];
@@ -70,6 +85,8 @@ function stripTags(html: string): string {
 
 export interface HeroCF {
   readonly path: string;
+  /** 'master' or the CF variation name the copy came from. */
+  readonly variation: string;
   readonly title: string;
   readonly subtitle: string;
   readonly description: string;
@@ -77,19 +94,52 @@ export interface HeroCF {
   readonly ctaLabel: string;
 }
 
-/** The personalized trip hero (CTA model, wknd-adventures/en/promotions). */
-export async function getHero(config: AemConfig): Promise<HeroCF | null> {
-  const frs = await listFragments(config, `${WKND_DAM}/promotions`);
-  const fr = frs.find((f) => f.slug === 'trip-hero') ?? frs[0];
-  if (!fr) return null;
+/** Master plus every named variation, keyed by normalized variation name. */
+export interface HeroSet {
+  readonly master: HeroCF;
+  readonly variations: Readonly<Record<string, HeroCF>>;
+}
+
+/** "maya_surfer", "Maya Surfer" and "maya-surfer" all normalize the same. */
+export function variationKey(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+}
+
+function toHero(config: AemConfig, fr: Fragment, variation: string): HeroCF {
   return {
     path: fr.path,
+    variation,
     title: first(fr, 'title'),
     subtitle: first(fr, 'subtitle'),
     description: first(fr, 'description'),
     image: damImage(config, first(fr, 'bannerimage')),
     ctaLabel: first(fr, 'ctalabel').trim(),
   };
+}
+
+/**
+ * The personalized trip hero (CTA model, wknd-adventures/en/promotions) and its
+ * audience variations. A variation named after a persona (e.g. "Maya Surfer"
+ * for maya-surfer) carries that audience's image and copy; master is the default.
+ */
+export async function getHero(config: AemConfig): Promise<HeroSet | null> {
+  const frs = await listFragments(config, `${WKND_DAM}/promotions`);
+  const fr = frs.find((f) => f.slug === 'trip-hero') ?? frs[0];
+  if (!fr) return null;
+  const master = toHero(config, fr, 'master');
+  let items: DeliveryItem[] = [];
+  try {
+    items = fr.id ? await listVariations(config, fr.id) : [];
+  } catch (err) {
+    console.error('[cf-delivery] hero variations failed, using master:', err);
+  }
+  const variations: Record<string, HeroCF> = {};
+  for (const item of items) {
+    if (!item.name) continue;
+    const v = flatten({ ...item, path: fr.path });
+    variations[variationKey(item.name)] = toHero(config, v, item.name);
+  }
+  return { master, variations };
 }
 
 export interface PersonaCF {
@@ -161,7 +211,7 @@ export async function getAlerts(config: AemConfig): Promise<readonly AlertCF[]> 
   }));
 }
 
-/** Build the Universal Editor resource URN for a Content Fragment path. */
-export function aueResource(path: string): string {
-  return `urn:aemconnection:${path}/jcr:content/data/master`;
+/** Build the Universal Editor resource URN for a Content Fragment (variation). */
+export function aueResource(path: string, variation = 'master'): string {
+  return `urn:aemconnection:${path}/jcr:content/data/${variation}`;
 }

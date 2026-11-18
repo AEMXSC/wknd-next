@@ -1,8 +1,8 @@
 import { getAemConfig } from '@/lib/aem-config';
 import { getOffers, type Article, type Offer } from '@/lib/aem-client';
 import {
-  fallbackPersonas, getAlerts, getFieldNotes, getHero, getPersonas,
-  type AlertCF, type HeroCF, type PersonaCF,
+  fallbackPersonas, getAlerts, getFieldNotes, getHero, getPersonas, variationKey,
+  type AlertCF, type HeroSet, type PersonaCF,
 } from '@/lib/cf-delivery';
 import Masthead from '@/components/Masthead';
 import TripHero from '@/components/TripHero';
@@ -15,7 +15,8 @@ import LiveRefresh from '@/components/LiveRefresh';
 
 // WKND member trip-companion app. Every content surface is a live WKND Content
 // Fragment on the XSC showcase, read server-side from publish:
-//   hero        -> CF Delivery API        (wknd-adventures/en/promotions, CTA)
+//   hero        -> CF Delivery API        (wknd-adventures/en/promotions, CTA;
+//                                          one variation per persona audience)
 //   personas    -> CF Delivery API        (wknd-adventures/en/personas, Persona)
 //   adventures  -> securbank/OfferByPath  (wknd-adventures/en/offers, Offer)
 //   field notes -> CF Delivery API        (wknd-adventures/en/articles, Article)
@@ -41,8 +42,8 @@ export default async function Home({
 }) {
   const config = getAemConfig();
   const { persona: personaSlug } = await searchParams;
-  const [hero, personas, offers, notes, alerts] = await Promise.all([
-    safe<HeroCF | null>('getHero', () => getHero(config), null),
+  const [heroSet, personas, offers, notes, alerts] = await Promise.all([
+    safe<HeroSet | null>('getHero', () => getHero(config), null),
     safe<readonly PersonaCF[]>('getPersonas', () => getPersonas(config), fallbackPersonas()),
     safe<readonly Offer[]>('getOffers', () => getOffers(config), []),
     safe<readonly Article[]>('getFieldNotes', () => getFieldNotes(config), []),
@@ -51,6 +52,10 @@ export default async function Home({
 
   const active = personas.find((p) => p.slug === personaSlug) ?? personas[0];
   const name = active?.name ?? 'Explorer';
+  // The hero variation named after the active persona, else master.
+  const hero = heroSet
+    ? heroSet.variations[variationKey(active?.slug ?? '')] ?? heroSet.master
+    : null;
 
   return (
     <>
