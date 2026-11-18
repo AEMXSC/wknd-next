@@ -17,10 +17,10 @@ export async function generateMetadata(): Promise<Metadata> {
     other['urn:adobe:aue:system:aemconnection'] = `aem:${author}`;
   }
   return {
-    title: 'Citizens — Online Banking',
+    title: 'WKND — My Trip',
     description:
-      'A headless online-banking dashboard: offers, articles, and disclosures '
-      + 'delivered from AEM Content Fragments via GraphQL, editable in Universal Editor.',
+      'A headless WKND trip-companion app: personalized hero, adventures, field notes '
+      + 'and trail alerts delivered from AEM Content Fragments, editable in Universal Editor.',
     other,
   };
 }

@@ -23,11 +23,6 @@ export interface AemConfig {
   readonly fontKit: string | null;
   /** Brand name shown in the masthead. Defaults to a neutral label. */
   readonly brandName: string;
-  /**
-   * Optional Content AI GraphQL endpoint for DA Structured Content (POC, VPN-only).
-   * When set, structured offers are read from it first; null keeps the da-sc worker.
-   */
-  readonly contentAiGqlUrl: string | null;
 }
 
 function stripTrailingSlash(value: string): string {
@@ -54,8 +49,7 @@ export function getAemConfig(): AemConfig {
   const token = process.env.AEM_TOKEN?.trim() || null;
   const ueEnabled = (process.env.UE_ENABLED ?? 'false').trim().toLowerCase() === 'true';
   const fontKit = process.env.NEXT_PUBLIC_FONT_KIT?.trim() || null;
-  const brandName = process.env.NEXT_PUBLIC_BRAND_NAME?.trim() || 'Citizens';
-  const contentAiGqlUrl = stripTrailingSlash(process.env.CONTENT_AI_GQL_URL?.trim() ?? '') || null;
+  const brandName = process.env.NEXT_PUBLIC_BRAND_NAME?.trim() || 'WKND';
 
   if (!warned && (!publish || !cfPrefix)) {
     // Fail loud, once, in server logs. Missing config is the most common
@@ -69,6 +63,6 @@ export function getAemConfig(): AemConfig {
   }
 
   return Object.freeze({
-    author, publish, cfPrefix, token, ueEnabled, fontKit, brandName, contentAiGqlUrl,
+    author, publish, cfPrefix, token, ueEnabled, fontKit, brandName,
   });
 }

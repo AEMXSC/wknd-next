@@ -1,32 +1,38 @@
-// AEM Content Fragment Delivery API client. Used for CF types that have no
-// persisted GraphQL query on this instance (cards, disclosures). Lists a DAM
-// folder and flattens each fragment's fields to a simple name -> values map.
-// Public on publish, so read server-side (no CORS, no token unless gated).
+// AEM Content Fragment Delivery API client. Used for CF types read by folder
+// (hero, personas, field notes, alerts). Lists a DAM folder and flattens each
+// fragment's fields to a simple name -> values map. Public on publish, so read
+// server-side (no CORS, no token unless gated).
 
 import type { AemConfig } from './aem-config';
+import type { Article } from './aem-client';
 
 interface DeliveryField {
   name: string;
   type: string;
-  values?: string[];
+  values?: unknown[];
 }
 
 interface DeliveryItem {
   path?: string;
+  title?: string;
   fields?: DeliveryField[];
 }
 
 export interface Fragment {
   readonly slug: string;
   readonly path: string;
+  readonly title: string;
   readonly fields: Readonly<Record<string, readonly string[]>>;
 }
 
+/** DAM root for every WKND demo fragment on the XSC showcase. */
+export const WKND_DAM = '/content/dam/wknd-adventures/en';
+
 function flatten(item: DeliveryItem): Fragment {
   const fields: Record<string, string[]> = {};
-  for (const f of item.fields ?? []) fields[f.name] = f.values ?? [];
+  for (const f of item.fields ?? []) fields[f.name] = (f.values ?? []).map(String);
   const path = item.path ?? '';
-  return { slug: path.split('/').pop() ?? '', path, fields };
+  return { slug: path.split('/').pop() ?? '', path, title: item.title ?? '', fields };
 }
 
 /** List the content fragments directly under a DAM folder. */
@@ -51,42 +57,102 @@ function first(fragment: Fragment, name: string): string {
   return fragment.fields[name]?.[0] ?? '';
 }
 
-export interface CardCF {
-  readonly slug: string;
-  readonly path: string;
-  readonly name: string;
-  readonly summary: string;
-  readonly benefitsHtml: string;
-  readonly image: string;
+/** Web-sized publish rendition for a DAM image path (originals are 1-2 MB). */
+export function damImage(config: AemConfig, ref: string): string {
+  if (!ref) return '';
+  if (!ref.startsWith('/')) return ref;
+  return `${config.publish}${encodeURI(ref)}/jcr:content/renditions/cq5dam.web.1280.1280.jpeg`;
 }
 
-/** Credit-card Content Fragments (citizens/en/cards). */
-export async function getCards(config: AemConfig): Promise<CardCF[]> {
-  const frs = await listFragments(config, '/content/dam/citizens/en/cards');
+function stripTags(html: string): string {
+  return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+export interface HeroCF {
+  readonly path: string;
+  readonly title: string;
+  readonly subtitle: string;
+  readonly description: string;
+  readonly image: string;
+  readonly ctaLabel: string;
+}
+
+/** The personalized trip hero (CTA model, wknd-adventures/en/promotions). */
+export async function getHero(config: AemConfig): Promise<HeroCF | null> {
+  const frs = await listFragments(config, `${WKND_DAM}/promotions`);
+  const fr = frs.find((f) => f.slug === 'trip-hero') ?? frs[0];
+  if (!fr) return null;
+  return {
+    path: fr.path,
+    title: first(fr, 'title'),
+    subtitle: first(fr, 'subtitle'),
+    description: first(fr, 'description'),
+    image: damImage(config, first(fr, 'bannerimage')),
+    ctaLabel: first(fr, 'ctalabel').trim(),
+  };
+}
+
+export interface PersonaCF {
+  readonly slug: string;
+  /** Empty when the persona is the built-in fallback (not from AEM). */
+  readonly path: string;
+  readonly name: string;
+  readonly interest: string;
+  readonly location: string;
+  readonly label: string;
+}
+
+// Used only when publish returns no Persona fragments (the Persona model must be
+// published to the publish tier for them to be delivered). Mirrors the three
+// Persona CFs authored in wknd-adventures/en/personas.
+const FALLBACK_PERSONAS: readonly PersonaCF[] = [
+  { slug: 'alex-trekker', path: '', name: 'Alex', interest: 'long-distance trekking', location: 'Denver', label: 'Trekker' },
+  { slug: 'maya-surfer', path: '', name: 'Maya', interest: 'surfing', location: 'San Diego', label: 'Surfer' },
+  { slug: 'sam-cyclist', path: '', name: 'Sam', interest: 'gravel cycling', location: 'Toronto', label: 'Cyclist' },
+];
+
+/** Persona CFs (ref-demo-eds Persona model) used to resolve {{profile.*}} tokens. */
+export async function getPersonas(config: AemConfig): Promise<readonly PersonaCF[]> {
+  const frs = await listFragments(config, `${WKND_DAM}/personas`);
+  if (!frs.length) return FALLBACK_PERSONAS;
+  return frs.map((fr) => ({
+    slug: fr.slug,
+    path: fr.path,
+    name: first(fr, 'name'),
+    interest: first(fr, 'interest'),
+    location: first(fr, 'location'),
+    label: fr.title.split('—').pop()?.trim() || first(fr, 'name'),
+  }));
+}
+
+export function fallbackPersonas(): readonly PersonaCF[] {
+  return FALLBACK_PERSONAS;
+}
+
+/** Field Notes: Article CFs (securbank Article model, wknd-adventures/en/articles). */
+export async function getFieldNotes(config: AemConfig): Promise<readonly Article[]> {
+  const frs = await listFragments(config, `${WKND_DAM}/articles`);
   return frs.map((fr) => {
-    const ref = first(fr, 'creditCardImage');
-    const image = ref.startsWith('/') ? `${config.publish}${ref}` : ref;
+    const html = first(fr, 'main');
     return {
-      slug: fr.slug,
-      path: fr.path,
-      name: first(fr, 'creditCardName'),
-      summary: first(fr, 'shortSummary'),
-      benefitsHtml: first(fr, 'benefitsSummaryRich'),
-      image,
+      _path: fr.path,
+      headline: first(fr, 'headline'),
+      main: { html, plaintext: stripTags(html) },
+      heroImage: { _publishUrl: damImage(config, first(fr, 'heroImage')) },
     };
   });
 }
 
-export interface DisclosureCF {
+export interface AlertCF {
   readonly slug: string;
   readonly path: string;
   readonly title: string;
   readonly bodyHtml: string;
 }
 
-/** Term & Condition (disclosure) Content Fragments (citizens/en/disclosures). */
-export async function getDisclosureCFs(config: AemConfig): Promise<DisclosureCF[]> {
-  const frs = await listFragments(config, '/content/dam/citizens/en/disclosures');
+/** Trail & permit alerts: Term & Condition CFs (wknd-adventures/en/alerts). */
+export async function getAlerts(config: AemConfig): Promise<readonly AlertCF[]> {
+  const frs = await listFragments(config, `${WKND_DAM}/alerts`);
   return frs.map((fr) => ({
     slug: fr.slug,
     path: fr.path,

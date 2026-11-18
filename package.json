@@ -1,8 +1,8 @@
 {
-  "name": "citizens-next",
+  "name": "wknd-next",
   "version": "0.1.0",
   "private": true,
-  "description": "Citizens Bank headless app surface. Instance of AEMXSC/aem-ue-headless-next: consumes AEM Content Fragments and is live-editable in Universal Editor.",
+  "description": "WKND trip-companion headless app. Instance of AEMXSC/aem-ue-headless-next: consumes AEM Content Fragments and is live-editable in Universal Editor.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

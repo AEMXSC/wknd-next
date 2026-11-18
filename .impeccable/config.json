@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "instrument sans",
+        "createdAt": "2026-11-18T22:58:37.953Z",
+        "reason": "brand font: WKND Adventures site ships Instrument Sans in styles/wknd-shared.css; app must match the customer brand"
+      }
+    ]
+  }
+}

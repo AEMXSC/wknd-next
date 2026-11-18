@@ -7,12 +7,11 @@
 // queries actually called. Keeping names here, and the prefix in aem-config,
 // removes that class of mistake.
 
+// Field Notes (Article CFs) are read through the CF Delivery API instead of
+// ArticleList: the shared ArticleList query on the showcase is scoped to the
+// Citizens folder and returns no WKND articles.
 export const QUERIES = {
-  /** Returns a list of Article content fragments for the card grid. */
-  articleList: 'ArticleList',
-  /** Returns a list of Offer content fragments for the carousel. */
-  offerList: 'OfferList',
-  /** Returns a single Offer by DAM path (fallback when no list query exists). */
+  /** Returns a single Offer by DAM path (the showcase has no OfferList query). */
   offerByPath: 'OfferByPath',
 } as const;
 

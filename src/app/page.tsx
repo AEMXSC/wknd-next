@@ -1,22 +1,26 @@
 import { getAemConfig } from '@/lib/aem-config';
-import { getArticles, getOffers, type Article, type Offer } from '@/lib/aem-client';
-import { getCards, getDisclosureCFs, type CardCF, type DisclosureCF } from '@/lib/cf-delivery';
+import { getOffers, type Article, type Offer } from '@/lib/aem-client';
+import {
+  fallbackPersonas, getAlerts, getFieldNotes, getHero, getPersonas,
+  type AlertCF, type HeroCF, type PersonaCF,
+} from '@/lib/cf-delivery';
 import Masthead from '@/components/Masthead';
-import OfferHero from '@/components/OfferHero';
-import Dashboard from '@/components/Dashboard';
-import CardsSection from '@/components/CardsSection';
+import TripHero from '@/components/TripHero';
+import MyTrip from '@/components/MyTrip';
+import AdventuresSection from '@/components/AdventuresSection';
 import InsightsGrid from '@/components/InsightsGrid';
-import Disclosures from '@/components/Disclosures';
+import TrailAlerts from '@/components/TrailAlerts';
 import SiteFooter from '@/components/SiteFooter';
 import LiveRefresh from '@/components/LiveRefresh';
 
-// Citizens online-banking dashboard, mirroring the NYL headless app. Every
-// content surface is a live Citizens Content Fragment read server-side:
-//   offers      -> securbank/OfferByPath  (citizens/en/offers)
-//   articles    -> securbank/ArticleList  (citizens/en/articles)
-//   cards       -> CF Delivery API        (citizens/en/cards)
-//   disclosures -> CF Delivery API        (citizens/en/disclosures)
-// The account figures are the app shell.
+// WKND member trip-companion app. Every content surface is a live WKND Content
+// Fragment on the XSC showcase, read server-side from publish:
+//   hero        -> CF Delivery API        (wknd-adventures/en/promotions, CTA)
+//   personas    -> CF Delivery API        (wknd-adventures/en/personas, Persona)
+//   adventures  -> securbank/OfferByPath  (wknd-adventures/en/offers, Offer)
+//   field notes -> CF Delivery API        (wknd-adventures/en/articles, Article)
+//   alerts      -> CF Delivery API        (wknd-adventures/en/alerts, Term & Condition)
+// The trip figures (dates, checklist) are the app shell.
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 export const fetchCache = 'force-no-store';
@@ -30,27 +34,38 @@ async function safe<T>(label: string, fn: () => Promise<T>, fallback: T): Promis
   }
 }
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ persona?: string }>;
+}) {
   const config = getAemConfig();
-  const [articles, offers, cards, disclosures] = await Promise.all([
-    safe<readonly Article[]>('getArticles', () => getArticles(config), []),
+  const { persona: personaSlug } = await searchParams;
+  const [hero, personas, offers, notes, alerts] = await Promise.all([
+    safe<HeroCF | null>('getHero', () => getHero(config), null),
+    safe<readonly PersonaCF[]>('getPersonas', () => getPersonas(config), fallbackPersonas()),
     safe<readonly Offer[]>('getOffers', () => getOffers(config), []),
-    safe<readonly CardCF[]>('getCards', () => getCards(config), []),
-    safe<readonly DisclosureCF[]>('getDisclosureCFs', () => getDisclosureCFs(config), []),
+    safe<readonly Article[]>('getFieldNotes', () => getFieldNotes(config), []),
+    safe<readonly AlertCF[]>('getAlerts', () => getAlerts(config), []),
   ]);
+
+  const active = personas.find((p) => p.slug === personaSlug) ?? personas[0];
+  const name = active?.name ?? 'Explorer';
 
   return (
     <>
       <LiveRefresh />
-      <Masthead />
-      <OfferHero offers={offers} />
-      <Dashboard />
-      <CardsSection cards={cards} />
-      <main className="wrap">
-        <h2 className="wrap-title">Insights &amp; guidance</h2>
-        <InsightsGrid articles={articles} />
-      </main>
-      <Disclosures disclosures={disclosures} />
+      <Masthead name={name} initials={name.slice(0, 1).toUpperCase()} />
+      {hero ? <TripHero hero={hero} personas={personas} active={active} /> : null}
+      <MyTrip trip={offers[0]} name={name} publish={config.publish} />
+      <TrailAlerts alerts={alerts} />
+      <AdventuresSection offers={offers} publish={config.publish} />
+      <section className="section section-alt" id="field-notes">
+        <div className="wrap">
+          <h2 className="h2">Field Notes</h2>
+          <InsightsGrid articles={notes} />
+        </div>
+      </section>
       <SiteFooter />
     </>
   );

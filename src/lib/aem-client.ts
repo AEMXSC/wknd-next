@@ -38,14 +38,14 @@ export interface Offer {
 }
 
 // The showcase instance exposes Offer fragments via OfferByPath (there is no
-// OfferList query). These are the five published Citizens Offer CFs under
-// citizens/en/offers.
+// OfferList query). These are the five published WKND adventure Offer CFs
+// under wknd-adventures/en/offers.
 const OFFER_PATHS = [
-  '/content/dam/citizens/en/offers/citizens-checking',
-  '/content/dam/citizens/en/offers/citizens-savings',
-  '/content/dam/citizens/en/offers/citizens-credit-cards',
-  '/content/dam/citizens/en/offers/citizens-home-equity',
-  '/content/dam/citizens/en/offers/citizens-student-lending',
+  '/content/dam/wknd-adventures/en/offers/patagonia-w-trek',
+  '/content/dam/wknd-adventures/en/offers/costa-rica-surf',
+  '/content/dam/wknd-adventures/en/offers/lofoten-kayak',
+  '/content/dam/wknd-adventures/en/offers/mont-blanc-ski-touring',
+  '/content/dam/wknd-adventures/en/offers/tuscany-cycling',
 ];
 
 /**
@@ -99,19 +99,6 @@ export async function fetchPersisted<T = unknown>(
   return (await res.json()) as T;
 }
 
-interface ListResponse<K extends string, T> {
-  data?: Record<K, { items?: readonly T[] } | undefined>;
-}
-
-/** Fetch the Article list for the card grid. Returns [] on empty/missing data. */
-export async function getArticles(config: AemConfig): Promise<readonly Article[]> {
-  const json = await fetchPersisted<ListResponse<'articleList', Article>>(
-    config,
-    QUERIES.articleList,
-  );
-  return json.data?.articleList?.items ?? [];
-}
-
 interface OfferByPathResponse {
   data?: { offerByPath?: { item?: Offer } };
 }
@@ -143,8 +130,15 @@ export async function getOffers(config: AemConfig): Promise<readonly Offer[]> {
   return offers;
 }
 
-/** Best available delivery URL for a CF image reference. */
-export function imageUrl(ref: CFImageRef | undefined): string {
+/**
+ * Best available delivery URL for a CF image reference. When the publish origin
+ * is passed, the relative Dynamic Media URL is preferred and resized, since the
+ * DAM originals are 1-2 MB.
+ */
+export function imageUrl(ref: CFImageRef | undefined, publish?: string, width = 1200): string {
   if (!ref) return '';
+  if (publish && ref._dynamicUrl?.startsWith('/')) {
+    return `${publish}${ref._dynamicUrl}?width=${width}&quality=80`;
+  }
   return ref._dmS7Url || ref._publishUrl || ref._dynamicUrl || '';
 }

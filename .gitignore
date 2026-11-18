@@ -28,3 +28,7 @@ yarn-error.log*
 !.vscode/extensions.json
 .idea
 .vercel
+
+# design hook cache
+/.impeccable/hook.cache.json
+tsconfig.tsbuildinfo
