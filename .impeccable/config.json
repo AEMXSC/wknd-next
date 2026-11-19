@@ -8,6 +8,24 @@
         "value": "instrument sans",
         "createdAt": "2026-11-18T22:58:37.953Z",
         "reason": "brand font: WKND Adventures site ships Instrument Sans in styles/wknd-shared.css; app must match the customer brand"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "public/styles/wknd-shared.css"
+        ],
+        "createdAt": "2026-11-19T01:16:21.623Z",
+        "reason": "customer brand stylesheet copied verbatim from AEMXSC/wknd-adventures; must not be edited (user asked for the exact site stylesheet)"
+      },
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "public/styles/wknd-shared.css"
+        ],
+        "createdAt": "2026-11-19T01:16:21.905Z",
+        "reason": "customer brand stylesheet copied verbatim from AEMXSC/wknd-adventures; must not be edited (user asked for the exact site stylesheet)"
       }
     ]
   }
