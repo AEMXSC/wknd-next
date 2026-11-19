@@ -34,6 +34,10 @@
 @media (max-width: 640px) { .uname { display: none; } }
 
 /* ---------- Hero additions ---------- */
+/* The site sizes the hero in vh. Universal Editor sizes its canvas iframe to
+   the page height, so 65vh feeds back into a hero thousands of px tall (title
+   off-screen, banner zoomed to a blur). Cap it; normal viewports are unchanged. */
+.hero-section.hero-section--full { min-height: min(65vh, 46rem); }
 .hero-section .tag { margin-bottom: var(--space-md); }
 .hero-title { margin-bottom: var(--space-md); color: var(--color-white); }
 .persona-switch { display: flex; gap: var(--space-xs); align-items: center; flex-wrap: wrap; margin-top: var(--space-xl); }
