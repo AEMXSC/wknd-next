@@ -1,7 +1,7 @@
 import { aueResource, type AlertCF } from '@/lib/cf-delivery';
 
-// Trail & permit alerts: Term & Condition Content Fragments repurposed as live
-// ranger notices (wknd-adventures/en/alerts). This is the demo's "edit once,
+// Trail & permit alerts: WKND Next Trail Alert Content Fragments, live
+// ranger notices (wknd-next/en/alerts). This is the demo's "edit once,
 // every surface updates" moment: change an alert in Universal Editor or the CF
 // editor, publish, and LiveRefresh picks it up within seconds.
 export default function TrailAlerts({ alerts }: { alerts: readonly AlertCF[] }) {

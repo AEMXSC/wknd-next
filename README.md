@@ -9,19 +9,27 @@ WKND trip-companion app, built on the same architecture as [`citizens-next`](htt
 
 A signed-in WKND member ("Alex") with a booked Patagonia trek.
 
-| Section | Content Fragments | Model | Read via |
-|---|---|---|---|
-| Personalized hero | `wknd-adventures/en/promotions/trip-hero` | CTA (ref-demo-eds) | CF Delivery API |
-| Persona switcher (`?persona=`) | `wknd-adventures/en/personas/*` | Persona (ref-demo-eds) | CF Delivery API |
-| My Trip + Adventures for you | `wknd-adventures/en/offers/*` | Offer (securbank) | `securbank/OfferByPath` |
-| Trail & permit alerts | `wknd-adventures/en/alerts/*` | Term & Condition (securbank) | CF Delivery API |
-| Field Notes | `wknd-adventures/en/articles/*` | Article (securbank) | CF Delivery API |
+Every section reads from `/content/dam/wknd-next/en/` through the CF Delivery API on publish. The models are WKND-only, copied into `/conf/wknd-universal`, and each has one WKND HTML template.
 
-**How the hero personalizes:** its copy carries `{{profile.name}}`, `{{profile.interest}}` and `{{profile.location}}` tokens. Visitors see them resolved from the active Persona CF. Inside the Universal Editor iframe the raw tokens are shown instead, so authors edit the template rather than one persona's values.
+| Section | Fragments | Model | HTML template |
+|---|---|---|---|
+| Personalized hero | `promotions/trip-hero` (+ `maya_surfer`, `sam_cyclist` variations) | WKND Next Hero | WKND Next hero |
+| Persona switcher (`?persona=`) | `personas/*` | WKND Next Persona | WKND Next persona |
+| My Trip + Adventures for you | `adventures/*` | WKND Next Adventure | WKND Next adventure card |
+| Trail & permit alerts | `alerts/*` | WKND Next Trail Alert | WKND Next trail alert |
+| Field Notes | `field-notes/*` | WKND Next Field Note | WKND Next field note |
+
+**How the hero personalizes:** its copy carries `{{profile.name}}`, `{{profile.interest}}` and `{{profile.location}}` tokens, resolved from the active Persona CF. Each persona audience also gets its own CF variation, named after the persona (e.g. "Sam Cyclist" for `sam-cyclist`), with its own image and copy. Master is the default. Inside the Universal Editor iframe the raw tokens are shown, so authors edit the template rather than one persona's values.
+
+**Open in app from the CF editor:** every WKND Next model has the preview URL pattern
+
+```
+https://wknd-next.vercel.app/?cf=${contentFragment.path}&variation=${contentFragment.variation}
+```
+
+The app selects the matching persona and hero variation, then scrolls to and highlights the fragment (`src/components/FocusFragment.tsx`). Each HTML template also carries an "Open in WKND app" link.
 
 **The wow moment:** edit a trail alert in Universal Editor (or in the CF editor) and publish it. `LiveRefresh` shows the change in the app within about 10 seconds.
-
-**Known gap:** the Persona model isn't published to the publish tier, so Persona CFs aren't delivered yet. Until it is, the app uses built-in copies of the three personas (`fallbackPersonas()` in `src/lib/cf-delivery.ts`), and the persona chips aren't UE-bound.
 
 ## Quick start
 

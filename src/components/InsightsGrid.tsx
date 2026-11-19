@@ -1,13 +1,13 @@
 import { imageUrl, type Article } from '@/lib/aem-client';
 import { aueResource } from '@/lib/cf-delivery';
 
-// "Field Notes": Article Content Fragments (wknd-adventures/en/articles) read
+// "Field Notes": WKND Next Field Note Content Fragments (wknd-next/en/field-notes) read
 // through the CF Delivery API. UE instrumentation keeps each card editable.
 export default function InsightsGrid({ articles }: { articles: readonly Article[] }) {
   if (!articles.length) {
     return (
       <p className="empty">
-        No field notes returned. Publish the Article fragments in wknd-adventures/en/articles.
+        No field notes returned. Publish the Field Note fragments in wknd-next/en/field-notes.
       </p>
     );
   }

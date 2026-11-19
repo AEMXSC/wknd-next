@@ -1,10 +1,11 @@
-// AEM Content Fragment Delivery API client. Used for CF types read by folder
-// (hero, personas, field notes, alerts). Lists a DAM folder and flattens each
+// AEM Content Fragment Delivery API client. Every WKND content type is read by
+// folder (hero, personas, adventures, field notes, alerts), on the WKND Next
+// models in /conf/wknd-universal. Lists a DAM folder and flattens each
 // fragment's fields to a simple name -> values map. Public on publish, so read
 // server-side (no CORS, no token unless gated).
 
 import type { AemConfig } from './aem-config';
-import type { Article } from './aem-client';
+import type { Article, Offer } from './aem-client';
 
 interface DeliveryField {
   name: string;
@@ -29,7 +30,12 @@ export interface Fragment {
 }
 
 /** DAM root for every WKND demo fragment on the XSC showcase. */
-export const WKND_DAM = '/content/dam/wknd-adventures/en';
+export const WKND_DAM = '/content/dam/wknd-next/en';
+
+// Display order for adventures; the first is the member's booked trip.
+const ADVENTURE_ORDER = [
+  'patagonia-w-trek', 'costa-rica-surf', 'lofoten-kayak', 'mont-blanc-ski-touring', 'tuscany-cycling',
+];
 
 function flatten(item: DeliveryItem): Fragment {
   const fields: Record<string, string[]> = {};
@@ -118,7 +124,7 @@ function toHero(config: AemConfig, fr: Fragment, variation: string): HeroCF {
 }
 
 /**
- * The personalized trip hero (CTA model, wknd-adventures/en/promotions) and its
+ * The personalized trip hero (WKND Next Hero, wknd-next/en/promotions) and its
  * audience variations. A variation named after a persona (e.g. "Maya Surfer"
  * for maya-surfer) carries that audience's image and copy; master is the default.
  */
@@ -144,7 +150,6 @@ export async function getHero(config: AemConfig): Promise<HeroSet | null> {
 
 export interface PersonaCF {
   readonly slug: string;
-  /** Empty when the persona is the built-in fallback (not from AEM). */
   readonly path: string;
   readonly name: string;
   readonly interest: string;
@@ -152,19 +157,9 @@ export interface PersonaCF {
   readonly label: string;
 }
 
-// Used only when publish returns no Persona fragments (the Persona model must be
-// published to the publish tier for them to be delivered). Mirrors the three
-// Persona CFs authored in wknd-adventures/en/personas.
-const FALLBACK_PERSONAS: readonly PersonaCF[] = [
-  { slug: 'alex-trekker', path: '', name: 'Alex', interest: 'long-distance trekking', location: 'Denver', label: 'Trekker' },
-  { slug: 'maya-surfer', path: '', name: 'Maya', interest: 'surfing', location: 'San Diego', label: 'Surfer' },
-  { slug: 'sam-cyclist', path: '', name: 'Sam', interest: 'gravel cycling', location: 'Toronto', label: 'Cyclist' },
-];
-
-/** Persona CFs (ref-demo-eds Persona model) used to resolve {{profile.*}} tokens. */
+/** WKND Next Persona CFs (wknd-next/en/personas) that resolve {{profile.*}} tokens. */
 export async function getPersonas(config: AemConfig): Promise<readonly PersonaCF[]> {
   const frs = await listFragments(config, `${WKND_DAM}/personas`);
-  if (!frs.length) return FALLBACK_PERSONAS;
   return frs.map((fr) => ({
     slug: fr.slug,
     path: fr.path,
@@ -175,13 +170,31 @@ export async function getPersonas(config: AemConfig): Promise<readonly PersonaCF
   }));
 }
 
-export function fallbackPersonas(): readonly PersonaCF[] {
-  return FALLBACK_PERSONAS;
+/** Adventures: WKND Next Adventure CFs (wknd-next/en/adventures). */
+export async function getAdventures(config: AemConfig): Promise<readonly Offer[]> {
+  const frs = await listFragments(config, `${WKND_DAM}/adventures`);
+  const rank = (slug: string) => {
+    const i = ADVENTURE_ORDER.indexOf(slug);
+    return i === -1 ? ADVENTURE_ORDER.length : i;
+  };
+  return [...frs]
+    .sort((a, b) => rank(a.slug) - rank(b.slug))
+    .map((fr) => {
+      const html = first(fr, 'detail');
+      return {
+        _path: fr.path,
+        pretitle: first(fr, 'pretitle'),
+        headline: first(fr, 'headline'),
+        detail: { html, plaintext: stripTags(html) },
+        callToAction: first(fr, 'callToAction'),
+        heroImage: { _publishUrl: damImage(config, first(fr, 'heroImage')) },
+      };
+    });
 }
 
-/** Field Notes: Article CFs (securbank Article model, wknd-adventures/en/articles). */
+/** Field Notes: WKND Next Field Note CFs (wknd-next/en/field-notes). */
 export async function getFieldNotes(config: AemConfig): Promise<readonly Article[]> {
-  const frs = await listFragments(config, `${WKND_DAM}/articles`);
+  const frs = await listFragments(config, `${WKND_DAM}/field-notes`);
   return frs.map((fr) => {
     const html = first(fr, 'main');
     return {
@@ -200,7 +213,7 @@ export interface AlertCF {
   readonly bodyHtml: string;
 }
 
-/** Trail & permit alerts: Term & Condition CFs (wknd-adventures/en/alerts). */
+/** Trail & permit alerts: WKND Next Trail Alert CFs (wknd-next/en/alerts). */
 export async function getAlerts(config: AemConfig): Promise<readonly AlertCF[]> {
   const frs = await listFragments(config, `${WKND_DAM}/alerts`);
   return frs.map((fr) => ({

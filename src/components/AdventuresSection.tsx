@@ -1,8 +1,8 @@
 import { imageUrl, type Offer } from '@/lib/aem-client';
 import { aueResource } from '@/lib/cf-delivery';
 
-// "Adventures for you": Offer Content Fragments (wknd-adventures/en/offers) read
-// through the OfferByPath persisted query. Each card and field is bound to its
+// "Adventures for you": WKND Next Adventure Content Fragments (wknd-next/en/adventures)
+// read through the CF Delivery API. Each card and field is bound to its
 // CF so it can be edited in place in Universal Editor.
 export default function AdventuresSection({
   offers,
