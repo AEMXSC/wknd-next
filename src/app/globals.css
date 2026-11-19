@@ -28,8 +28,8 @@
 .user[aria-expanded="true"] .caret { transform: rotate(180deg); }
 .menu { display: none; position: absolute; right: 0; top: calc(100% + 8px); min-width: 12rem; background: var(--color-white); color: var(--color-black); border: 2px solid var(--color-black); border-radius: var(--radius-md); box-shadow: var(--shadow-button); padding: 6px; z-index: 110; }
 .menu.open { display: block; }
-.menu a { display: block; padding: var(--space-xs) var(--space-sm); text-decoration: none; border-radius: 4px; }
-.menu a:hover { background: var(--color-gray-100); }
+.menu button { display: block; width: 100%; text-align: left; background: none; border: 0; color: inherit; font: inherit; cursor: pointer; padding: var(--space-xs) var(--space-sm); border-radius: 4px; }
+.menu button:hover, .menu button:focus-visible { background: var(--color-gray-100); }
 .menu-sep { height: 1px; background: var(--color-gray-200); margin: 6px; }
 @media (max-width: 640px) { .uname { display: none; } }
 
@@ -84,6 +84,10 @@
 .adv-featured-body .adv-alert { margin-bottom: var(--space-sm); }
 .adv-alert .alert-icon { width: 22px; height: 22px; font-size: 0.8rem; }
 .article-card .text-button { margin-top: var(--space-xs); }
+
+/* Rich text CF fields render as authored HTML; keep the wrapper's type size. */
+.cf-rich > * { font-size: inherit; margin: 0 0 var(--space-xs); }
+.cf-rich > :last-child { margin-bottom: 0; }
 
 /* ---------- CF editor deep link (?cf=) ---------- */
 .cf-focus { outline: 4px solid var(--color-amber); outline-offset: 4px; transition: outline-color 0.6s ease; }

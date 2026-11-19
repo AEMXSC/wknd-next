@@ -1,6 +1,10 @@
 import { imageUrl, type Offer } from '@/lib/aem-client';
 import { aueResource, type AlertCF } from '@/lib/cf-delivery';
 
+/** The member's booked adventure; the shell figures below describe this trip. */
+export const BOOKED_TRIP_SLUG = 'patagonia-w-trek';
+const TRIP_START = Date.UTC(2027, 0, 12);
+
 const CHECKLIST = [
   { item: 'Park entry ticket', done: true },
   { item: 'Refugio Chileno reservation', done: true },
@@ -23,8 +27,12 @@ export default function MyTrip({
   name: string;
   publish: string;
 }) {
-  const img = imageUrl(trip?.heroImage, publish, 600);
-  const alert = trip?.alertPath ? alerts.find((a) => a.path === trip.alertPath) : undefined;
+  // The dates, checklist and permits are Patagonia's; without that fragment
+  // they would describe the wrong trip, so the panel is hidden instead.
+  if (!trip) return null;
+  const img = imageUrl(trip.heroImage, publish, 600);
+  const alert = trip.alertPath ? alerts.find((a) => a.path === trip.alertPath) : undefined;
+  const daysToGo = Math.max(0, Math.ceil((TRIP_START - Date.now()) / 86_400_000));
   return (
     <section className="secondary-section mytrip" id="my-trip">
       <div className="container">
@@ -33,14 +41,14 @@ export default function MyTrip({
           <article className="card panel trip-main">
             {img ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img className="trip-img" src={img} alt="" />
+              <img className="trip-img" src={img} alt="" width={1280} height={853} />
             ) : null}
             <div className="trip-info">
               <div><span className="tag">Your next trip</span></div>
-              <h2 className="h4-heading trip-name">{trip?.headline ?? 'Plan your next trip'}</h2>
+              <h2 className="h4-heading trip-name">{trip.headline}</h2>
               <p className="trip-meta">Jan 12 – Jan 17 · Puerto Natales, Chile · Guide: Camila R.</p>
               <div className="countdown">
-                <div><strong>55</strong><span>days</span></div>
+                <div><strong>{daysToGo}</strong><span>days</span></div>
                 <div><strong>4</strong><span>nights in refugios</span></div>
                 <div><strong>72</strong><span>km</span></div>
               </div>

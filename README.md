@@ -271,7 +271,6 @@ src/
     layout.tsx               UE connection meta + cors.js, fonts
     page.tsx                 fetches all CF folders; persona / variation / ?cf= selection
     globals.css              app-only styles (persona switcher, My Trip, alerts) on the site tokens
-    api/graphql/[...q]/      generic AEM GraphQL proxy (unused by the page; kept for tenants that need it)
   components/
     Masthead, UserMenu       header with live badge and member menu
     TripHero                 personalized hero + persona switcher (client: shows raw tokens in UE)

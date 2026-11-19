@@ -47,7 +47,6 @@ export function getAemConfig(): AemConfig {
   if (!warned && (!publish || !damRoot)) {
     // Fail loud, once, in server logs. Missing config is the most common
     // first-run mistake; a clear message beats a confusing 404 downstream.
-    // eslint-disable-next-line no-console
     console.warn(
       '[aem-config] AEM_PUBLISH and/or AEM_DAM_ROOT are not set. '
         + 'Copy .env.example to .env.local and fill them in.',

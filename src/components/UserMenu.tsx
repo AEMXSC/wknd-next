@@ -30,18 +30,20 @@ export default function UserMenu({ name, initials }: { name: string; initials: s
       <button
         type="button"
         className="user"
-        aria-haspopup="true"
         aria-expanded={open}
+        aria-controls="user-menu-list"
         onClick={() => setOpen((v) => !v)}
       >
         <span className="user-avatar">{initials}</span>
         <span className="uname">{name}</span>
         <span className="caret" aria-hidden="true">▾</span>
       </button>
-      <div className={`menu ${open ? 'open' : ''}`} role="menu">
-        {ITEMS.map((i) => <a key={i} role="menuitem" href="#">{i}</a>)}
+      {/* A disclosure, not an ARIA menu: plain buttons, Tab to move. Demo-only
+          items, so they just close the panel instead of jumping to "#". */}
+      <div id="user-menu-list" className={`menu ${open ? 'open' : ''}`}>
+        {ITEMS.map((i) => <button key={i} type="button" onClick={() => setOpen(false)}>{i}</button>)}
         <div className="menu-sep" />
-        <a role="menuitem" href="#" className="menu-out">Log out</a>
+        <button type="button" className="menu-out" onClick={() => setOpen(false)}>Log out</button>
       </div>
     </div>
   );

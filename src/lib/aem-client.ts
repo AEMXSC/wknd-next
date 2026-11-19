@@ -1,8 +1,7 @@
 // Shared Content Fragment shapes used by the components, plus the image URL
 // helper. Every WKND content type is read through the CF Delivery API
 // (src/lib/cf-delivery.ts) on the WKND Next models; no persisted GraphQL query
-// is needed. The /api/graphql route remains as a generic proxy for client-side
-// persisted-query reads if a tenant needs one.
+// is needed.
 
 export interface CFImageRef {
   readonly _dmS7Url?: string;
@@ -13,7 +12,7 @@ export interface CFImageRef {
 export interface Article {
   readonly _path?: string;
   readonly headline?: string;
-  readonly main?: { readonly plaintext?: string; readonly html?: string };
+  readonly main?: { readonly html?: string };
   readonly heroImage?: CFImageRef;
 }
 
@@ -21,7 +20,7 @@ export interface Offer {
   readonly _path?: string;
   readonly pretitle?: string;
   readonly headline?: string;
-  readonly detail?: { readonly plaintext?: string; readonly html?: string };
+  readonly detail?: { readonly html?: string };
   readonly callToAction?: string;
   readonly heroImage?: CFImageRef;
   /** 'featured' renders a large card; anything else is a standard card. */

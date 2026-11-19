@@ -28,13 +28,13 @@ export default function InsightsGrid({ articles }: { articles: readonly Article[
             {img ? (
               <div className="article-card-image">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={img} alt={a.headline ?? ''} loading="lazy" data-aue-prop="heroImage" data-aue-type="media" data-aue-label="image" />
+                <img src={img} alt={a.headline ?? ''} width={1280} height={853} loading="lazy" data-aue-prop="heroImage" data-aue-type="media" data-aue-label="image" />
               </div>
             ) : null}
             <div className="article-card-body">
               <div><span className="tag">Field note</span></div>
               <h3 className="h4-heading" data-aue-prop="headline" data-aue-type="text" data-aue-label="headline">{a.headline}</h3>
-              <p className="paragraph-sm utility-text-secondary" data-aue-prop="main" data-aue-type="richtext" data-aue-label="body">{a.main?.plaintext}</p>
+              <div className="cf-rich paragraph-sm utility-text-secondary" data-aue-prop="main" data-aue-type="richtext" data-aue-label="body" dangerouslySetInnerHTML={{ __html: a.main?.html ?? '' }} />
             </div>
           </article>
         );
