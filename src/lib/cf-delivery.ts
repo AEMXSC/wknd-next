@@ -29,8 +29,6 @@ export interface Fragment {
   readonly fields: Readonly<Record<string, readonly string[]>>;
 }
 
-/** DAM root for every WKND demo fragment on the XSC showcase. */
-export const WKND_DAM = '/content/dam/wknd-next/en';
 
 // Display order for adventures; the first is the member's booked trip.
 const ADVENTURE_ORDER = [
@@ -129,7 +127,7 @@ function toHero(config: AemConfig, fr: Fragment, variation: string): HeroCF {
  * for maya-surfer) carries that audience's image and copy; master is the default.
  */
 export async function getHero(config: AemConfig): Promise<HeroSet | null> {
-  const frs = await listFragments(config, `${WKND_DAM}/promotions`);
+  const frs = await listFragments(config, `${config.damRoot}/promotions`);
   const fr = frs.find((f) => f.slug === 'trip-hero') ?? frs[0];
   if (!fr) return null;
   const master = toHero(config, fr, 'master');
@@ -159,7 +157,7 @@ export interface PersonaCF {
 
 /** WKND Next Persona CFs (wknd-next/en/personas) that resolve {{profile.*}} tokens. */
 export async function getPersonas(config: AemConfig): Promise<readonly PersonaCF[]> {
-  const frs = await listFragments(config, `${WKND_DAM}/personas`);
+  const frs = await listFragments(config, `${config.damRoot}/personas`);
   return frs.map((fr) => ({
     slug: fr.slug,
     path: fr.path,
@@ -172,7 +170,7 @@ export async function getPersonas(config: AemConfig): Promise<readonly PersonaCF
 
 /** Adventures: WKND Next Adventure CFs (wknd-next/en/adventures). */
 export async function getAdventures(config: AemConfig): Promise<readonly Offer[]> {
-  const frs = await listFragments(config, `${WKND_DAM}/adventures`);
+  const frs = await listFragments(config, `${config.damRoot}/adventures`);
   const rank = (slug: string) => {
     const i = ADVENTURE_ORDER.indexOf(slug);
     return i === -1 ? ADVENTURE_ORDER.length : i;
@@ -197,7 +195,7 @@ export async function getAdventures(config: AemConfig): Promise<readonly Offer[]
 
 /** Field Notes: WKND Next Field Note CFs (wknd-next/en/field-notes). */
 export async function getFieldNotes(config: AemConfig): Promise<readonly Article[]> {
-  const frs = await listFragments(config, `${WKND_DAM}/field-notes`);
+  const frs = await listFragments(config, `${config.damRoot}/field-notes`);
   return frs.map((fr) => {
     const html = first(fr, 'main');
     return {
@@ -218,7 +216,7 @@ export interface AlertCF {
 
 /** Trail & permit alerts: WKND Next Trail Alert CFs (wknd-next/en/alerts). */
 export async function getAlerts(config: AemConfig): Promise<readonly AlertCF[]> {
-  const frs = await listFragments(config, `${WKND_DAM}/alerts`);
+  const frs = await listFragments(config, `${config.damRoot}/alerts`);
   return frs.map((fr) => ({
     slug: fr.slug,
     path: fr.path,

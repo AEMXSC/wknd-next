@@ -1,0 +1,131 @@
+{
+  "_readme": "Seed content for wknd-next. Create each folder under AEM_DAM_ROOT (default /content/dam/wknd-next/en), then each fragment on the named model. Image paths point at the WKND Universal assets on the XSC Showcase; if your sandbox doesn't have them, upload images (see images[]) and update the paths. The hero variations must be named after the persona slugs (title 'Maya Surfer' -> node maya_surfer -> matches persona maya-surfer). Publish everything, and the five models, when done.",
+  "images": [
+    "/content/dam/wknd-universal/en/adventures/hero-image.jpg",
+    "/content/dam/wknd-universal/en/adventures/san diego surf sports.jpg",
+    "/content/dam/wknd-universal/en/adventures/cycling-in-tuscany.jpg",
+    "/content/dam/wknd-universal/en/adventures/trekking-adventure.jpg",
+    "/content/dam/wknd-universal/en/adventures/aloha spirits in northern norway.jpg",
+    "/content/dam/wknd-universal/en/adventures/skiing in mont blanc.jpg",
+    "/content/dam/wknd-universal/en/adventures/athlete on trail.jpg",
+    "/content/dam/wknd-universal/en/adventures/Firefly_vibrant modern  image of a person ot for an adventure in mountains  with dark cloudy  120982.jpg",
+    "/content/dam/wknd-universal/en/adventures/Western Australia by Camper Van.jpg"
+  ],
+  "folders": ["promotions", "personas", "adventures", "field-notes", "alerts"],
+  "fragments": [
+    {
+      "folder": "alerts", "name": "torres-del-paine-trail-status", "title": "Torres del Paine — Trail status", "model": "wknd-next-trail-alert",
+      "fields": { "termsReference": "Torres del Paine — W Circuit open", "termDetails": "<p><strong>Open:</strong> all W Circuit sections are open. Mirador Base Las Torres closes to ascents after <strong>14:00</strong>. Expect gusts to 90 km/h on the Los Cuernos section.</p>" }
+    },
+    {
+      "folder": "alerts", "name": "conaf-permit-reminder", "title": "CONAF permit reminder", "model": "wknd-next-trail-alert",
+      "fields": { "termsReference": "Permit — Park entry & refugio bookings", "termDetails": "<p>Park entry must be purchased online before arrival. Rangers check refugio or campsite reservations at every checkpoint. Carry a printed or offline copy.</p>" }
+    },
+    {
+      "folder": "alerts", "name": "leave-no-trace", "title": "Leave No Trace", "model": "wknd-next-trail-alert",
+      "fields": { "termsReference": "Fire ban & Leave No Trace", "termDetails": "<p>Open flames, including stoves, are only permitted in designated cooking shelters. Pack out everything you pack in. Fines start at CLP 1,000,000.</p>" }
+    },
+    {
+      "folder": "personas", "name": "alex-trekker", "title": "Alex — Trekker", "model": "wknd-next-persona",
+      "fields": { "brand": "wknd", "userName": "alex.rivera", "name": "Alex", "age": 34, "interest": "long-distance trekking", "location": "Denver", "occupation": "Product designer" }
+    },
+    {
+      "folder": "personas", "name": "maya-surfer", "title": "Maya — Surfer", "model": "wknd-next-persona",
+      "fields": { "brand": "wknd", "userName": "maya.chen", "name": "Maya", "age": 28, "interest": "surfing", "location": "San Diego", "occupation": "Nurse" }
+    },
+    {
+      "folder": "personas", "name": "sam-cyclist", "title": "Sam — Cyclist", "model": "wknd-next-persona",
+      "fields": { "brand": "wknd", "userName": "sam.okafor", "name": "Sam", "age": 45, "interest": "gravel cycling", "location": "Toronto", "occupation": "Architect" }
+    },
+    {
+      "folder": "promotions", "name": "trip-hero", "title": "Your next adventure (hero)", "model": "wknd-next-hero",
+      "fields": {
+        "title": "{{profile.name}}, your next adventure is calling",
+        "subtitle": "Picked for you",
+        "description": "Hand-picked trips for {{profile.interest}}, starting close to {{profile.location}}. Field-tested routes, local guides and permits handled.",
+        "bannerimage": "/content/dam/wknd-universal/en/adventures/hero-image.jpg",
+        "ctalabel": "See trips for me"
+      },
+      "variations": [
+        {
+          "title": "Maya Surfer", "description": "Surf audience: matches the maya-surfer persona",
+          "fields": {
+            "title": "{{profile.name}}, the swell is lining up",
+            "subtitle": "Swell season",
+            "description": "Hand-picked surf trips for {{profile.interest}} fans, a short hop from {{profile.location}}. Local coaches, tide-timed sessions and boards waiting on the beach.",
+            "bannerimage": "/content/dam/wknd-universal/en/adventures/san diego surf sports.jpg",
+            "ctalabel": "See surf trips"
+          }
+        },
+        {
+          "title": "Sam Cyclist", "description": "Cycling audience: matches the sam-cyclist persona",
+          "fields": {
+            "title": "{{profile.name}}, the white roads are calling",
+            "subtitle": "Gravel picks",
+            "description": "Hand-picked rides for {{profile.interest}}, with flights that work from {{profile.location}}. Support van, e-bike option and long lunches built in.",
+            "bannerimage": "/content/dam/wknd-universal/en/adventures/cycling-in-tuscany.jpg",
+            "ctalabel": "See cycling trips"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "adventures", "name": "patagonia-w-trek", "title": "Patagonia W Trek", "model": "wknd-next-adventure",
+      "fields": {
+        "pretitle": "Expedition · 5 days", "headline": "Walk the W Circuit in Torres del Paine",
+        "detail": "<p>Granite towers, glacier lakes and refugio nights. Our field-tested route covers permits, wind windows and what to pack for four seasons in a day.</p>",
+        "callToAction": "Plan this trek", "ctaUrl": "https://wknd-adventures.com/blog/patagonia-trek", "layout": "featured",
+        "heroImage": "/content/dam/wknd-universal/en/adventures/trekking-adventure.jpg",
+        "termsConditions": "<AEM_DAM_ROOT>/alerts/torres-del-paine-trail-status"
+      }
+    },
+    {
+      "folder": "adventures", "name": "costa-rica-surf", "title": "Costa Rica Surf Week", "model": "wknd-next-adventure",
+      "fields": {
+        "pretitle": "Surf · 7 days", "headline": "Find your line on the Nicoya Peninsula",
+        "detail": "<p>Warm water, consistent beach breaks and local coaches who read the tide charts for you. Dawn sessions, rainforest afternoons.</p>",
+        "callToAction": "Book a spot", "ctaUrl": "https://wknd-adventures.com/blog/surfing-costa-rica", "layout": "standard",
+        "heroImage": "/content/dam/wknd-universal/en/adventures/san diego surf sports.jpg"
+      }
+    },
+    {
+      "folder": "adventures", "name": "lofoten-kayak", "title": "Lofoten Sea Kayak", "model": "wknd-next-adventure",
+      "fields": {
+        "pretitle": "Paddle · 6 days", "headline": "Paddle the Lofoten Islands under the midnight sun",
+        "detail": "<p>Fjord crossings, white-sand coves and wild camps above the Arctic Circle. Guided by paddlers who know every current.</p>",
+        "callToAction": "See the route", "ctaUrl": "https://wknd-adventures.com/blog/kayaking-norway", "layout": "standard",
+        "heroImage": "/content/dam/wknd-universal/en/adventures/aloha spirits in northern norway.jpg"
+      }
+    },
+    {
+      "folder": "adventures", "name": "mont-blanc-ski-touring", "title": "Mont Blanc Ski Touring", "model": "wknd-next-adventure",
+      "fields": {
+        "pretitle": "Alpine · 4 days", "headline": "Skin up, ski down: the Mont Blanc massif",
+        "detail": "<p>Hut-to-hut touring with IFMGA guides, avalanche briefings every morning and the Vallée Blanche as the finale.</p>",
+        "callToAction": "Check conditions", "ctaUrl": "https://wknd-adventures.com/blog/winter-mountaineering", "layout": "standard",
+        "heroImage": "/content/dam/wknd-universal/en/adventures/skiing in mont blanc.jpg"
+      }
+    },
+    {
+      "folder": "adventures", "name": "tuscany-cycling", "title": "Tuscany Gravel Ride", "model": "wknd-next-adventure",
+      "fields": {
+        "pretitle": "Cycling · 5 days", "headline": "Ride the white roads of Tuscany",
+        "detail": "<p>Strade bianche, cypress ridgelines and long lunches. Support van, e-bike option and a route built for every pace.</p>",
+        "callToAction": "Ride with us", "ctaUrl": "https://wknd-adventures.com/blog/alpine-cycling", "layout": "standard",
+        "heroImage": "/content/dam/wknd-universal/en/adventures/cycling-in-tuscany.jpg"
+      }
+    },
+    {
+      "folder": "field-notes", "name": "ultralight-packing", "title": "Ultralight: What to cut, what to keep", "model": "wknd-next-field-note",
+      "fields": { "headline": "Sub-10 lb: what to cut, what to keep", "main": "<p>We weighed every item from three seasons on the trail. Here is the kit that earned its place, and the comfort items we refuse to leave behind.</p>", "heroImage": "/content/dam/wknd-universal/en/adventures/athlete on trail.jpg" }
+    },
+    {
+      "folder": "field-notes", "name": "patagonia-wind-windows", "title": "Reading Patagonian wind", "model": "wknd-next-field-note",
+      "fields": { "headline": "How to read a Patagonian wind window", "main": "<p>Gusts over 100 km/h are normal on the W. Our guides explain how to time the Mirador Base Las Torres climb and when to stay in the refugio.</p>", "heroImage": "/content/dam/wknd-universal/en/adventures/Firefly_vibrant modern  image of a person ot for an adventure in mountains  with dark cloudy  120982.jpg" }
+    },
+    {
+      "folder": "field-notes", "name": "western-australia-van", "title": "Van life, Western Australia", "model": "wknd-next-field-note",
+      "fields": { "headline": "4,000 km of red dirt: Western Australia by camper van", "main": "<p>Fuel stops, water math and the coastal camps worth the detour. A field dispatch from three weeks on the Coral Coast.</p>", "heroImage": "/content/dam/wknd-universal/en/adventures/Western Australia by Camper Van.jpg" }
+    }
+  ]
+}

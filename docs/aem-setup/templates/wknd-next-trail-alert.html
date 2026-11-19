@@ -1,0 +1,22 @@
+<style>
+  .wk { font-family: "Instrument Sans", Arial, sans-serif; color: #0f1a14; max-width: 640px; margin: 0 auto; }
+  .wk-alert { display: flex; gap: 16px; padding: 22px; border: 2px solid #0f1a14; border-radius: 12px; background: #f5f0e8; box-shadow: 4px 4px 0 0 #0f1a14; }
+  .wk-icon { flex: none; width: 34px; height: 34px; border-radius: 50%; background: #e8651a; display: grid; place-items: center; font-weight: 700; font-size: 18px; }
+  .wk-label { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #3d4f45; margin: 0 0 4px; }
+  .wk-head { font-size: 20px; font-weight: 700; margin: 0 0 6px; }
+  .wk-detail { font-size: 15px; line-height: 1.55; color: #3d4f45; }
+  .wk-detail p { margin: 0; }
+  .wk-app { display: flex; justify-content: flex-end; margin-top: 18px; padding: 12px 16px; border: 2px solid #0f1a14; border-radius: 10px; background: #fff; font-size: 14px; }
+  .wk-app a { font-weight: 700; color: #0f1a14; }
+</style>
+<div class="wk">
+  <section class="wk-alert">
+    <span class="wk-icon" aria-hidden="true">!</span>
+    <div>
+      <p class="wk-label">Trail &amp; permit alert</p>
+      <h3 class="wk-head">{{fields.termsReference}}</h3>
+      <div class="wk-detail">{{{fields.termDetails}}}</div>
+    </div>
+  </section>
+  <p class="wk-app"><a href="<YOUR_APP_URL>/?cf={{properties.path}}" target="_blank" rel="noopener">Open in WKND app &rarr;</a></p>
+</div>

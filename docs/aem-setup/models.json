@@ -1,0 +1,74 @@
+{
+  "_readme": "Content Fragment Model definitions for wknd-next, exported from the XSC Showcase (/conf/wknd-universal). Recreate them in your own configuration folder (e.g. /conf/<your-conf>). Replace <YOUR_APP_URL> in previewUrlPattern with your deployed app URL. The Adventure model's termsConditions field must list the ID of YOUR WKND Next Trail Alert model, so create the Trail Alert model first. Field names are what the app reads; keep them exactly as written.",
+  "createOrder": ["wknd-next-trail-alert", "wknd-next-persona", "wknd-next-hero", "wknd-next-field-note", "wknd-next-adventure"],
+  "models": [
+    {
+      "technicalName": "wknd-next-trail-alert",
+      "name": "WKND Next Trail Alert",
+      "description": "Live trail / permit alert in the WKND Next app.",
+      "previewUrlPattern": "<YOUR_APP_URL>/?cf=${contentFragment.path}&variation=${contentFragment.variation}",
+      "fields": [
+        { "name": "termsReference", "label": "Terms Reference", "type": "text", "maxLength": 255, "unique": true, "translatable": true },
+        { "name": "termDetails", "label": "Term Details", "type": "long-text", "mimeType": "text/html", "translatable": true }
+      ]
+    },
+    {
+      "technicalName": "wknd-next-persona",
+      "name": "WKND Next Persona",
+      "description": "Member persona used to resolve hero tokens in the WKND Next app.",
+      "previewUrlPattern": "<YOUR_APP_URL>/?cf=${contentFragment.path}&variation=${contentFragment.variation}",
+      "fields": [
+        { "name": "brand", "label": "Brand", "type": "text", "maxLength": 255 },
+        { "name": "userName", "label": "User Name or Email", "type": "text", "maxLength": 255, "unique": true },
+        { "name": "name", "label": "Name", "type": "text", "maxLength": 255 },
+        { "name": "age", "label": "Age", "type": "number" },
+        { "name": "gender", "label": "Gender", "type": "text", "maxLength": 255 },
+        { "name": "interest", "label": "Interest", "type": "text", "maxLength": 255 },
+        { "name": "location", "label": "Location", "type": "text", "maxLength": 255 },
+        { "name": "occupation", "label": "Occupation", "type": "text", "maxLength": 255 }
+      ]
+    },
+    {
+      "technicalName": "wknd-next-hero",
+      "name": "WKND Next Hero",
+      "description": "Personalized trip hero for the WKND Next app ({{profile.*}} tokens, one variation per persona).",
+      "previewUrlPattern": "<YOUR_APP_URL>/?cf=${contentFragment.path}&variation=${contentFragment.variation}",
+      "fields": [
+        { "name": "title", "label": "Title", "type": "text", "maxLength": 255, "required": true },
+        { "name": "subtitle", "label": "Subtitle", "type": "text", "maxLength": 255, "required": true },
+        { "name": "description", "label": "Description", "type": "long-text", "mimeType": "text/plain", "required": true },
+        { "name": "bannerimage", "label": "Main Image", "type": "content-reference", "root": "/content/dam", "required": true },
+        { "name": "ctalabel", "label": "Button Label", "type": "text", "maxLength": 255, "required": true },
+        { "name": "ctaurl", "label": "Button Link/URL", "type": "content-reference", "root": "/content", "_note": "Not read by the app; optional." }
+      ]
+    },
+    {
+      "technicalName": "wknd-next-field-note",
+      "name": "WKND Next Field Note",
+      "description": "Editorial field note in the WKND Next app.",
+      "previewUrlPattern": "<YOUR_APP_URL>/?cf=${contentFragment.path}&variation=${contentFragment.variation}",
+      "fields": [
+        { "name": "headline", "label": "Headline", "type": "text", "maxLength": 255, "translatable": true },
+        { "name": "main", "label": "Main", "type": "long-text", "mimeType": "text/html", "translatable": true },
+        { "name": "heroImage", "label": "Hero Image", "type": "content-reference", "showThumbnail": true, "allowedContentTypes": ["image"] }
+      ]
+    },
+    {
+      "technicalName": "wknd-next-adventure",
+      "name": "WKND Next Adventure",
+      "description": "Bookable adventure card in the WKND Next app.",
+      "previewUrlPattern": "<YOUR_APP_URL>/?cf=${contentFragment.path}&variation=${contentFragment.variation}",
+      "fields": [
+        { "name": "headline", "label": "Headline", "type": "text", "maxLength": 255, "required": true, "translatable": true },
+        { "name": "pretitle", "label": "Pre Title", "type": "text", "maxLength": 255, "translatable": true },
+        { "name": "detail", "label": "Detail", "type": "long-text", "mimeType": "text/html", "translatable": true },
+        { "name": "layout", "label": "Card layout", "description": "Featured adventures show as a large card in the WKND app.", "type": "enumeration", "hint": "select", "values": [ { "key": "Featured", "value": "featured" }, { "key": "Standard", "value": "standard" } ] },
+        { "name": "styles", "label": "Styles", "type": "text", "_note": "Not read by the app; optional." },
+        { "name": "callToAction", "label": "Call to Action", "type": "text", "maxLength": 255, "translatable": true },
+        { "name": "ctaUrl", "label": "Booking page URL", "description": "Where the call to action goes, e.g. the matching wknd-adventures.com page.", "type": "text", "maxLength": 255, "validationType": "url" },
+        { "name": "heroImage", "label": "Hero Image", "type": "content-reference", "root": "/content/dam", "imageWidth": { "min": 500 }, "allowedContentTypes": ["image"] },
+        { "name": "termsConditions", "label": "Trail alert", "description": "Live trail / permit alert for this adventure (WKND Next Trail Alert fragment).", "type": "content-fragment", "root": "<AEM_DAM_ROOT>/alerts", "allowFragmentCreation": false, "items": ["<ID_OF_YOUR_WKND_NEXT_TRAIL_ALERT_MODEL>"] }
+      ]
+    }
+  ]
+}

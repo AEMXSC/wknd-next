@@ -34,10 +34,10 @@ h1, h2, h3, p { margin: 0; }
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--brand-amber);
+  color: var(--brand-amber-text);
 }
 .link { font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--brand-amber); }
-.link:hover { color: var(--brand-amber); }
+.link:hover { color: var(--brand-amber-text); }
 .empty { color: var(--brand-muted); }
 
 .btn {

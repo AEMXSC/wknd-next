@@ -36,7 +36,8 @@
   --brand-border: #ddd8cf;
   --brand-muted: #7a8a80;
   --brand-ink-soft: #3d4f45;
-  --brand-amber: #e8651a;
+  --brand-amber: #e8651a;          /* fills, badges, buttons */
+  --brand-amber-text: #b4500f;     /* small amber text on light backgrounds (WCAG AA) */
   --brand-ok: #2f7a4f;
 
   --font-heading: "Syncopate", sans-serif;

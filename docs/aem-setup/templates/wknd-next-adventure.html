@@ -1,0 +1,36 @@
+<style>
+  .wk { font-family: "Instrument Sans", Arial, sans-serif; color: #0f1a14; max-width: 820px; margin: 0 auto; }
+  .wk-card { display: grid; grid-template-columns: 1fr 1fr; border: 2px solid #0f1a14; border-radius: 20px; overflow: hidden; background: #fff; }
+  .wk-card.is-featured { grid-template-columns: 3fr 2fr; box-shadow: 6px 6px 0 0 #0f1a14; }
+  .wk-media { position: relative; }
+  .wk-media img { width: 100%; height: 100%; min-height: 280px; object-fit: cover; display: block; }
+  .wk-badge { position: absolute; top: 14px; left: 14px; background: #e8651a; color: #0f1a14; border: 2px solid #0f1a14; border-radius: 6px; padding: 3px 10px; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .wk-body { padding: 28px; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+  .wk-pre { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #b4500f; margin: 0; }
+  .wk-head { font-family: Syncopate, Arial, sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2; text-transform: uppercase; margin: 0; }
+  .wk-detail { font-size: 15px; line-height: 1.55; color: #3d4f45; }
+  .wk-detail p { margin: 0; }
+  .wk-alert { display: flex; gap: 10px; padding: 10px 12px; border: 2px solid #0f1a14; border-radius: 8px; background: #f5f0e8; font-size: 13px; }
+  .wk-alert-icon { flex: none; width: 22px; height: 22px; border-radius: 50%; background: #e8651a; display: grid; place-items: center; font-weight: 700; }
+  .wk-alert strong { display: block; }
+  .wk-alert p { margin: 0; color: #3d4f45; }
+  .wk-btn { align-self: flex-start; margin-top: 8px; display: inline-block; padding: 10px 18px; background: #e8651a; color: #0f1a14; border: 2px solid #0f1a14; border-radius: 8px; box-shadow: 4px 4px 0 0 #0f1a14; font-weight: 700; text-decoration: none; }
+  .wk-app { display: flex; justify-content: flex-end; margin-top: 14px; padding: 12px 16px; border: 2px solid #0f1a14; border-radius: 10px; background: #f5f0e8; font-size: 14px; }
+  .wk-app a { font-weight: 700; color: #0f1a14; }
+  @media (max-width: 640px) { .wk-card, .wk-card.is-featured { grid-template-columns: 1fr; } }
+</style>
+<div class="wk">
+  <section class="wk-card {{#if (eq fields.layout "featured")}}is-featured{{/if}}">
+    {{#fields.heroImage}}<div class="wk-media">{{{fields.heroImage}}}{{#if (eq fields.layout "featured")}}<span class="wk-badge">Featured</span>{{/if}}</div>{{/fields.heroImage}}
+    <div class="wk-body">
+      {{#fields.pretitle}}<p class="wk-pre">{{fields.pretitle}}</p>{{/fields.pretitle}}
+      <h3 class="wk-head">{{fields.headline}}</h3>
+      <div class="wk-detail">{{{fields.detail}}}</div>
+      {{#if hasReferencedFragments}}{{#each referencedFragments}}
+      <div class="wk-alert"><span class="wk-alert-icon" aria-hidden="true">!</span><div><strong>{{fields.termsReference}}</strong>{{{fields.termDetails}}}</div></div>
+      {{/each}}{{/if}}
+      {{#fields.callToAction}}<a class="wk-btn" href="{{../fields.ctaUrl}}" target="_blank" rel="noopener">{{fields.callToAction}}</a>{{/fields.callToAction}}
+    </div>
+  </section>
+  <p class="wk-app"><a href="<YOUR_APP_URL>/?cf={{properties.path}}" target="_blank" rel="noopener">Open in WKND app &rarr;</a></p>
+</div>
