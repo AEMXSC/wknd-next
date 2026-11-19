@@ -247,6 +247,8 @@ done   # expect 1, 3, 5, 3, 3
 
 The same app can run on **AEM Edge Delivery / Document Authoring structured content** instead of Content Fragments, the way [`frescopa-kiosk`](https://github.com/AEMXSC/frescopa-kiosk) does. One switch picks the backend; the components don't change.
 
+**Converting your own app?** [How wknd-next added structured content](docs/add-structured-content.md) walks through the six steps, from the app's types to schemas, records, an adapter and SC Studio.
+
 | | `CONTENT_SOURCE=cf` (default) | `CONTENT_SOURCE=sc` |
 |---|---|---|
 | Content | AEM CS Content Fragments, `/content/dam/wknd-next/en/*` | DA records, `aemxsc/wknd-adventures` `/wknd-next/*` |
@@ -331,6 +333,7 @@ public/
 docs/
   aem-setup/                 models.json, fragments.json, templates/*.html
   sc-setup/                  structured content schemas + records (sc mode)
+  add-structured-content.md  case study: adding structured content to an existing app
   screenshots/
 scripts/seed-sc.mjs          seeds schemas + records into DA, builds the index once
 tests/                       node --test unit tests
