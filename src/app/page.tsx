@@ -6,7 +6,7 @@ import {
 } from '@/lib/cf-delivery';
 import Masthead from '@/components/Masthead';
 import TripHero from '@/components/TripHero';
-import MyTrip from '@/components/MyTrip';
+import MyTrip, { BOOKED_TRIP_SLUG } from '@/components/MyTrip';
 import AdventuresSection from '@/components/AdventuresSection';
 import InsightsGrid from '@/components/InsightsGrid';
 import TrailAlerts from '@/components/TrailAlerts';
@@ -91,7 +91,7 @@ export default async function Home({
       <FocusFragment path={params.cf ?? ''} />
       <Masthead name={name} initials={name.slice(0, 1).toUpperCase()} />
       {hero ? <TripHero hero={hero} personas={personas} active={active} /> : null}
-      <MyTrip trip={adventures[0]} alerts={alerts} name={name} publish={config.publish} />
+      <MyTrip trip={adventures.find((a) => a._path?.endsWith(`/${BOOKED_TRIP_SLUG}`))} alerts={alerts} name={name} publish={config.publish} />
       <TrailAlerts alerts={alerts} />
       <AdventuresSection offers={adventures} alerts={alerts} publish={config.publish} />
       <section className="section secondary-section" id="field-notes">

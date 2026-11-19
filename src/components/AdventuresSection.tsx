@@ -76,13 +76,13 @@ export default function AdventuresSection({
               {img ? (
                 <div className="featured-article-image">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={img} alt={o.headline ?? ''} data-aue-prop="heroImage" data-aue-type="media" data-aue-label="image" />
+                  <img src={img} alt={o.headline ?? ''} width={1280} height={853} data-aue-prop="heroImage" data-aue-type="media" data-aue-label="image" />
                 </div>
               ) : null}
               <div className="adv-featured-body">
-                <span className="tag" data-aue-prop="pretitle" data-aue-type="text" data-aue-label="pretitle">{o.pretitle}</span>
+                {o.pretitle ? <span className="tag" data-aue-prop="pretitle" data-aue-type="text" data-aue-label="pretitle">{o.pretitle}</span> : null}
                 <h3 className="h2-heading" data-aue-prop="headline" data-aue-type="text" data-aue-label="headline">{o.headline}</h3>
-                <p className="paragraph-lg utility-text-secondary" data-aue-prop="detail" data-aue-type="richtext" data-aue-label="detail">{o.detail?.plaintext}</p>
+                <div className="cf-rich paragraph-lg utility-text-secondary" data-aue-prop="detail" data-aue-type="richtext" data-aue-label="detail" dangerouslySetInnerHTML={{ __html: o.detail?.html ?? '' }} />
                 {alert ? <LinkedAlert alert={alert} /> : null}
                 <div className="button-group">
                   <Cta o={o} className="accent-button" />
@@ -107,13 +107,13 @@ export default function AdventuresSection({
                 {img ? (
                   <div className="article-card-image">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={img} alt={o.headline ?? ''} loading="lazy" data-aue-prop="heroImage" data-aue-type="media" data-aue-label="image" />
+                    <img src={img} alt={o.headline ?? ''} width={1280} height={853} loading="lazy" data-aue-prop="heroImage" data-aue-type="media" data-aue-label="image" />
                   </div>
                 ) : null}
                 <div className="article-card-body">
-                  <div><span className="tag" data-aue-prop="pretitle" data-aue-type="text" data-aue-label="pretitle">{o.pretitle}</span></div>
+                  {o.pretitle ? <div><span className="tag" data-aue-prop="pretitle" data-aue-type="text" data-aue-label="pretitle">{o.pretitle}</span></div> : null}
                   <h3 className="h4-heading" data-aue-prop="headline" data-aue-type="text" data-aue-label="headline">{o.headline}</h3>
-                  <p className="paragraph-sm utility-text-secondary" data-aue-prop="detail" data-aue-type="richtext" data-aue-label="detail">{o.detail?.plaintext}</p>
+                  <div className="cf-rich paragraph-sm utility-text-secondary" data-aue-prop="detail" data-aue-type="richtext" data-aue-label="detail" dangerouslySetInnerHTML={{ __html: o.detail?.html ?? '' }} />
                   {alert ? <LinkedAlert alert={alert} /> : null}
                   <div><Cta o={o} className="text-button" /></div>
                 </div>

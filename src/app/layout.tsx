@@ -48,7 +48,6 @@ export default function RootLayout({
         {/* Universal Editor CORS helper, in <head> like the NYL app so the
             editor handshake completes. Inert outside the UE iframe. */}
         {ueActive ? (
-          // eslint-disable-next-line @next/next/no-sync-scripts
           <script src="https://universal-editor-service.adobe.io/cors.js" async />
         ) : null}
       </head>

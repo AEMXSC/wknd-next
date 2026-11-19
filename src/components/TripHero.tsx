@@ -41,14 +41,14 @@ export default function TripHero({
       {hero.image ? (
         <div className="hero-bg">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={hero.image} alt="" data-aue-prop="bannerimage" data-aue-type="media" data-aue-label="banner image" />
+          <img src={hero.image} alt="" width={1280} height={853} fetchPriority="high" data-aue-prop="bannerimage" data-aue-type="media" data-aue-label="banner image" />
           <div className="overlay" />
         </div>
       ) : null}
       <div className="hero-content">
         <div className="container">
           <div className="hero-content-inner">
-            <span className="tag" data-aue-prop="subtitle" data-aue-type="text" data-aue-label="subtitle">{hero.subtitle}</span>
+            {hero.subtitle ? <span className="tag" data-aue-prop="subtitle" data-aue-type="text" data-aue-label="subtitle">{hero.subtitle}</span> : null}
             <h1 className="hero-title" data-aue-prop="title" data-aue-type="text" data-aue-label="title">{show(hero.title)}</h1>
             <p className="hero-lead paragraph-xl" data-aue-prop="description" data-aue-type="text" data-aue-label="description">{show(hero.description)}</p>
             <div className="button-group">

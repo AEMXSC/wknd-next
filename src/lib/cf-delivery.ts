@@ -42,6 +42,10 @@ function flatten(item: DeliveryItem): Fragment {
   return { id: item.id ?? '', slug: path.split('/').pop() ?? '', path, title: item.title ?? '', fields };
 }
 
+// A hung publish read fails fast (and falls back per section) instead of
+// holding the page until the Vercel function limit.
+const FETCH_TIMEOUT_MS = 5000;
+
 function authHeaders(config: AemConfig): Record<string, string> {
   const headers: Record<string, string> = { accept: 'application/json' };
   if (config.token) headers.authorization = `Bearer ${config.token}`;
@@ -50,8 +54,8 @@ function authHeaders(config: AemConfig): Record<string, string> {
 
 /** The named variations of one fragment (master is not included). */
 async function listVariations(config: AemConfig, id: string): Promise<DeliveryItem[]> {
-  const url = `${config.publish}/adobe/sites/cf/fragments/${id}/variations?ts=${Date.now()}`;
-  const res = await fetch(url, { headers: authHeaders(config), cache: 'no-store' });
+  const url = `${config.publish}/adobe/sites/cf/fragments/${encodeURIComponent(id)}/variations?ts=${Date.now()}`;
+  const res = await fetch(url, { headers: authHeaders(config), cache: 'no-store', signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
   if (!res.ok) throw new Error(`[cf-delivery] variations of "${id}" returned HTTP ${res.status}`);
   const json = (await res.json()) as { items?: DeliveryItem[] };
   return Array.isArray(json.items) ? json.items : [];
@@ -62,8 +66,8 @@ export async function listFragments(config: AemConfig, folder: string): Promise<
   if (!config.publish) throw new Error('[cf-delivery] AEM publish origin not configured');
   // ?ts= busts the AEM CDN cache so a freshly published fragment shows on the
   // next read (same technique the persisted-query client uses).
-  const url = `${config.publish}/adobe/sites/cf/fragments?path=${folder}&ts=${Date.now()}`;
-  const res = await fetch(url, { headers: authHeaders(config), cache: 'no-store' });
+  const url = `${config.publish}/adobe/sites/cf/fragments?path=${encodeURIComponent(folder)}&ts=${Date.now()}`;
+  const res = await fetch(url, { headers: authHeaders(config), cache: 'no-store', signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
   if (!res.ok) throw new Error(`[cf-delivery] "${folder}" returned HTTP ${res.status}`);
   const json = (await res.json()) as { items?: DeliveryItem[] };
   const items = Array.isArray(json.items) ? json.items : [];
@@ -81,10 +85,6 @@ export function damImage(config: AemConfig, ref: string): string {
   if (!ref) return '';
   if (!ref.startsWith('/')) return ref;
   return `${config.publish}${encodeURI(ref)}/jcr:content/renditions/cq5dam.web.1280.1280.jpeg`;
-}
-
-function stripTags(html: string): string {
-  return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 export interface HeroCF {
@@ -183,7 +183,7 @@ export async function getAdventures(config: AemConfig): Promise<readonly Offer[]
         _path: fr.path,
         pretitle: first(fr, 'pretitle'),
         headline: first(fr, 'headline'),
-        detail: { html, plaintext: stripTags(html) },
+        detail: { html },
         callToAction: first(fr, 'callToAction'),
         heroImage: { _publishUrl: damImage(config, first(fr, 'heroImage')) },
         layout: first(fr, 'layout'),
@@ -201,7 +201,7 @@ export async function getFieldNotes(config: AemConfig): Promise<readonly Article
     return {
       _path: fr.path,
       headline: first(fr, 'headline'),
-      main: { html, plaintext: stripTags(html) },
+      main: { html },
       heroImage: { _publishUrl: damImage(config, first(fr, 'heroImage')) },
     };
   });
