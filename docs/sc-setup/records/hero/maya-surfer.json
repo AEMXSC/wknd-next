@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "schemaName": "wknd-hero",
+    "title": "Trip hero (Maya Surfer)"
+  },
+  "data": {
+    "persona": "maya-surfer",
+    "subtitle": "Swell season",
+    "title": "{{profile.name}}, the swell is lining up",
+    "description": "Hand-picked surf trips for {{profile.interest}} fans, a short hop from {{profile.location}}. Local coaches, tide-timed sessions and boards waiting on the beach.",
+    "ctaLabel": "See surf trips",
+    "image": "https://publish-p153659-e1614585.adobeaemcloud.com/content/dam/wknd-universal/en/adventures/san%20diego%20surf%20sports.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg"
+  }
+}

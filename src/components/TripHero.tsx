@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { HeroCF, PersonaCF } from '@/lib/cf-delivery';
-import { aueResource } from '@/lib/cf-delivery';
+import { binding } from '@/lib/ue';
 import { resolveTokens } from '@/lib/personalize';
 
 // Personalized hero, driven by one CTA Content Fragment whose copy carries
@@ -19,24 +19,26 @@ export default function TripHero({
   hero,
   personas,
   active,
+  editable,
 }: {
   hero: HeroCF;
   personas: readonly PersonaCF[];
   active: PersonaCF | undefined;
+  editable: boolean;
 }) {
   const [inEditor, setInEditor] = useState(false);
   useEffect(() => {
     setInEditor(window.self !== window.top);
   }, []);
 
-  const show = (text: string) => (inEditor ? text : resolveTokens(text, active));
+  // Raw tokens only inside Universal Editor (cf mode). Other iframes, such as
+  // DA Studio's channel preview in sc mode, show the resolved copy.
+  const show = (text: string) => (inEditor && editable ? text : resolveTokens(text, active));
 
   return (
     <section
       className="hero-section hero-section--full"
-      data-aue-resource={aueResource(hero.path, hero.variation)}
-      data-aue-type="component"
-      data-aue-label={`Trip hero (${hero.variation})`}
+      {...binding(hero.path, `Trip hero (${hero.variation})`, editable, hero.variation)}
     >
       {hero.image ? (
         <div className="hero-bg">
@@ -67,7 +69,7 @@ export default function TripHero({
                   scroll={false}
                   className={`persona-chip ${p.slug === active?.slug ? 'on' : ''}`}
                   aria-current={p.slug === active?.slug ? 'true' : undefined}
-                  {...(p.path ? { 'data-aue-resource': aueResource(p.path), 'data-aue-type': 'component', 'data-aue-label': `Persona: ${p.name}` } : {})}
+                  {...binding(p.path, `Persona: ${p.name}`, editable)}
                 >
                   <span {...(p.path ? { 'data-aue-prop': 'name', 'data-aue-type': 'text' } : {})}>{p.name}</span>
                   <small>{p.label}</small>

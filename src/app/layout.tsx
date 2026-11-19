@@ -11,9 +11,10 @@ import './globals.css';
 // app does. cors.js only activates inside the Universal Editor iframe.
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { author } = getAemConfig();
+  const { author, source } = getAemConfig();
   const other: Record<string, string> = {};
-  if (author) {
+  // Structured content (sc mode) is edited in the DA form editor, not UE.
+  if (author && source === 'cf') {
     other['urn:adobe:aue:system:aemconnection'] = `aem:${author}`;
   }
   return {
@@ -30,8 +31,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { author, fontKit } = getAemConfig();
-  const ueActive = Boolean(author);
+  const { author, fontKit, source } = getAemConfig();
+  const ueActive = Boolean(author) && source === 'cf';
 
   return (
     <html lang="en">

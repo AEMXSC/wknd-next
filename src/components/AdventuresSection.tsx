@@ -1,5 +1,6 @@
 import { imageUrl, type Offer } from '@/lib/aem-client';
-import { aueResource, type AlertCF } from '@/lib/cf-delivery';
+import type { AlertCF } from '@/lib/cf-delivery';
+import { binding } from '@/lib/ue';
 
 // "Adventures for you": WKND Next Adventure Content Fragments (wknd-next/en/adventures)
 // read through the CF Delivery API. Authors control the card from the CF:
@@ -9,14 +10,9 @@ import { aueResource, type AlertCF } from '@/lib/cf-delivery';
 //                   editable in place (it carries its own UE binding)
 // Markup uses the site's featured-article and article-card classes.
 
-function LinkedAlert({ alert }: { alert: AlertCF }) {
+function LinkedAlert({ alert, editable }: { alert: AlertCF; editable: boolean }) {
   return (
-    <div
-      className="adv-alert"
-      data-aue-resource={aueResource(alert.path)}
-      data-aue-type="component"
-      data-aue-label={`Linked alert: ${alert.title}`}
-    >
+    <div className="adv-alert" {...binding(alert.path, `Linked alert: ${alert.title}`, editable)}>
       <span className="alert-icon" aria-hidden="true">!</span>
       <span data-aue-prop="termsReference" data-aue-type="text" data-aue-label="title">{alert.title}</span>
     </div>
@@ -43,10 +39,12 @@ export default function AdventuresSection({
   offers,
   alerts,
   publish,
+  editable,
 }: {
   offers: readonly Offer[];
   alerts: readonly AlertCF[];
   publish: string;
+  editable: boolean;
 }) {
   if (!offers.length) return null;
   const alertByPath = new Map(alerts.map((a) => [a.path, a]));
@@ -69,9 +67,7 @@ export default function AdventuresSection({
             <article
               key={o._path}
               className="featured-article adv-featured"
-              data-aue-resource={aueResource(o._path ?? '')}
-              data-aue-type="component"
-              data-aue-label={`Adventure: ${o.headline ?? ''}`}
+              {...binding(o._path ?? '', `Adventure: ${o.headline ?? ''}`, editable)}
             >
               {img ? (
                 <div className="featured-article-image">
@@ -83,7 +79,7 @@ export default function AdventuresSection({
                 {o.pretitle ? <span className="tag" data-aue-prop="pretitle" data-aue-type="text" data-aue-label="pretitle">{o.pretitle}</span> : null}
                 <h3 className="h2-heading" data-aue-prop="headline" data-aue-type="text" data-aue-label="headline">{o.headline}</h3>
                 <div className="cf-rich paragraph-lg utility-text-secondary" data-aue-prop="detail" data-aue-type="richtext" data-aue-label="detail" dangerouslySetInnerHTML={{ __html: o.detail?.html ?? '' }} />
-                {alert ? <LinkedAlert alert={alert} /> : null}
+                {alert ? <LinkedAlert alert={alert} editable={editable} /> : null}
                 <div className="button-group">
                   <Cta o={o} className="accent-button" />
                 </div>
@@ -100,9 +96,7 @@ export default function AdventuresSection({
               <article
                 key={o._path}
                 className="article-card"
-                data-aue-resource={aueResource(o._path ?? '')}
-                data-aue-type="component"
-                data-aue-label={`Adventure: ${o.headline ?? ''}`}
+                {...binding(o._path ?? '', `Adventure: ${o.headline ?? ''}`, editable)}
               >
                 {img ? (
                   <div className="article-card-image">
@@ -114,7 +108,7 @@ export default function AdventuresSection({
                   {o.pretitle ? <div><span className="tag" data-aue-prop="pretitle" data-aue-type="text" data-aue-label="pretitle">{o.pretitle}</span></div> : null}
                   <h3 className="h4-heading" data-aue-prop="headline" data-aue-type="text" data-aue-label="headline">{o.headline}</h3>
                   <div className="cf-rich paragraph-sm utility-text-secondary" data-aue-prop="detail" data-aue-type="richtext" data-aue-label="detail" dangerouslySetInnerHTML={{ __html: o.detail?.html ?? '' }} />
-                  {alert ? <LinkedAlert alert={alert} /> : null}
+                  {alert ? <LinkedAlert alert={alert} editable={editable} /> : null}
                   <div><Cta o={o} className="text-button" /></div>
                 </div>
               </article>

@@ -1,5 +1,6 @@
 import { imageUrl, type Offer } from '@/lib/aem-client';
-import { aueResource, type AlertCF } from '@/lib/cf-delivery';
+import type { AlertCF } from '@/lib/cf-delivery';
+import { binding } from '@/lib/ue';
 
 /** The member's booked adventure; the shell figures below describe this trip. */
 export const BOOKED_TRIP_SLUG = 'patagonia-w-trek';
@@ -21,11 +22,13 @@ export default function MyTrip({
   alerts,
   name,
   publish,
+  editable,
 }: {
   trip: Offer | undefined;
   alerts: readonly AlertCF[];
   name: string;
   publish: string;
+  editable: boolean;
 }) {
   // The dates, checklist and permits are Patagonia's; without that fragment
   // they would describe the wrong trip, so the panel is hidden instead.
@@ -72,12 +75,7 @@ export default function MyTrip({
             <p className="permit ok">Park entry · Confirmed</p>
             <p className="permit ok">Refugios · 4 of 4 booked</p>
             {alert ? (
-              <p
-                className="permit warn"
-                data-aue-resource={aueResource(alert.path)}
-                data-aue-type="component"
-                data-aue-label={`Linked alert: ${alert.title}`}
-              >
+              <p className="permit warn" {...binding(alert.path, `Linked alert: ${alert.title}`, editable)}>
                 <span data-aue-prop="termsReference" data-aue-type="text" data-aue-label="title">{alert.title}</span>
               </p>
             ) : null}

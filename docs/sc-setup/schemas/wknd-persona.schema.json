@@ -1,0 +1,16 @@
+{
+  "title": "WKND persona",
+  "description": "A member profile that resolves the {{profile.*}} tokens in the trip hero.",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string", "title": "First name", "maxLength": 40 },
+    "label": { "type": "string", "title": "Chip label", "maxLength": 24 },
+    "userName": { "type": "string", "title": "User name", "maxLength": 60 },
+    "occupation": { "type": "string", "title": "Occupation", "maxLength": 60 },
+    "interest": { "type": "string", "title": "Interest", "maxLength": 60 },
+    "location": { "type": "string", "title": "Home base", "maxLength": 60 },
+    "age": { "type": "number", "title": "Age" },
+    "brand": { "type": "string", "title": "Brand", "maxLength": 20 }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "schemaName": "wknd-persona",
+    "title": "Maya — Surfer"
+  },
+  "data": {
+    "name": "Maya",
+    "label": "Surfer",
+    "userName": "maya.chen",
+    "occupation": "Nurse",
+    "interest": "surfing",
+    "location": "San Diego",
+    "age": 28,
+    "brand": "wknd"
+  }
+}

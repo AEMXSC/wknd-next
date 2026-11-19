@@ -16,9 +16,10 @@ A headless **WKND trip-companion app** built with Next.js. Every piece of conten
 4. [Content model](#content-model)
 5. [Run it locally](#run-it-locally)
 6. [Set it up in your own AEM CS sandbox](#set-it-up-in-your-own-aem-cs-sandbox)
-7. [Gotchas we hit](#gotchas-we-hit)
-8. [Customizing](#customizing)
-9. [Project structure](#project-structure)
+7. [Structured content mode (AEM EDS / DA)](#structured-content-mode-aem-eds--da)
+8. [Gotchas we hit](#gotchas-we-hit)
+9. [Customizing](#customizing)
+10. [Project structure](#project-structure)
 
 ---
 
@@ -242,6 +243,40 @@ done   # expect 1, 3, 5, 3, 3
 
 ---
 
+## Structured content mode (AEM EDS / DA)
+
+The same app can run on **AEM Edge Delivery / Document Authoring structured content** instead of Content Fragments, the way [`frescopa-kiosk`](https://github.com/AEMXSC/frescopa-kiosk) does. One switch picks the backend; the components don't change.
+
+| | `CONTENT_SOURCE=cf` (default) | `CONTENT_SOURCE=sc` |
+|---|---|---|
+| Content | AEM CS Content Fragments, `/content/dam/wknd-next/en/*` | DA records, `aemxsc/wknd-adventures` `/wknd-next/*` |
+| Read through | CF Delivery API on publish | Structured Content API query index + `da-sc` |
+| Edit in | Universal Editor, CF editor | DA form editor (`da.live/app/aemsites/sc-editor/form#/aemxsc/wknd-adventures/wknd-next/...`) |
+| Personalized hero | one fragment + a variation per persona | one record per persona (`persona` field; empty = default) |
+| Also shown on | — | wknd-adventures.com `/trip-companion` (`wknd-sc-list` block) |
+
+**Schemas** (`docs/sc-setup/schemas/`): `wknd-hero`, `wknd-persona`, `wknd-adventure`, `wknd-field-note`, `wknd-trail-alert`. **Records** (`docs/sc-setup/records/`) mirror the 16 fragments; long text is plain text (blank line = new paragraph).
+
+**Seed your own site:**
+
+```bash
+npx github:adobe-rnd/da-auth-helper token      # IMS token -> ~/.aem/da-token.json
+AEM_ORG=<org> AEM_SITE=<site> node scripts/seed-sc.mjs --dry-run
+AEM_ORG=<org> AEM_SITE=<site> node scripts/seed-sc.mjs --build-index   # first run only
+```
+
+`--build-index` builds the preview and live query indexes. A site needs it **once**; after that, publishing a record reindexes it. To open records in the form editor, the org config needs an `editor.path` row: `/<org>/<site>/wknd-next` = `https://da.live/app/aemsites/sc-editor/form#`.
+
+**Run it:** `CONTENT_SOURCE=sc npm run dev`. Add `?tier=preview` to read previewed (unpublished) records, or set `AEM_SC_TIER=preview`. Other env vars: `AEM_SC_API`, `AEM_DA_SC`, `AEM_ORG`, `AEM_SITE`, `AEM_SC_ROOT` (defaults in `src/lib/aem-config.ts`). The deployed sc instance is a second Vercel project from this repo with `CONTENT_SOURCE=sc`.
+
+**Caveats:**
+- The Structured Content API is an experimental worker, not a supported product API. It is isolated in `src/lib/sc-delivery.ts`.
+- **Never POST to `query.json`** outside the seed script: a POST rebuilds the index.
+- There's no asset picker in the form editor yet. Image fields take a published https URL.
+- Universal Editor bindings are CF-only, so sc mode leaves them off. The `?cf=<record path>` deep link still highlights the record.
+
+---
+
 ## Gotchas we hit
 
 - **The preview URL pattern is per model.** It's not per template or per folder. A model shared with other demos means a shared app link, which is why WKND has its own models.
@@ -278,11 +313,15 @@ src/
     TrailAlerts              alerts band
     AdventuresSection        featured / standard cards, booking links, linked alert
     InsightsGrid             Field Notes
-    LiveRefresh              10 s refresh outside UE
-    FocusFragment            ?cf= deep link: scroll to and highlight the fragment
+    LiveRefresh              15 s refresh outside UE, paused in background tabs
+    FocusFragment            ?cf= deep link: scroll to and highlight the fragment or record
   lib/
-    aem-config.ts            the only env reader
+    aem-config.ts            the only env reader (CONTENT_SOURCE picks cf or sc)
+    content.ts               one set of loaders for the page, whichever backend
     cf-delivery.ts           CF Delivery API reads, variations, image renditions, UE resource URNs
+    sc-delivery.ts           DA structured content reads (query index + da-sc)
+    sc-map.ts                record -> component shapes (unit-tested in tests/)
+    ue.ts                    data-content-path + UE bindings (cf mode only)
     personalize.ts           {{profile.*}} token resolution
     aem-client.ts            shared content types + image helper
   styles/tokens.css          app aliases over the site tokens
@@ -291,5 +330,8 @@ public/
   fonts/                     Instrument Sans, Syncopate
 docs/
   aem-setup/                 models.json, fragments.json, templates/*.html
+  sc-setup/                  structured content schemas + records (sc mode)
   screenshots/
+scripts/seed-sc.mjs          seeds schemas + records into DA, builds the index once
+tests/                       node --test unit tests
 ```

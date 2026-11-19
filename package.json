@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/",
+    "seed:sc": "node scripts/seed-sc.mjs"
   },
   "dependencies": {
     "next": "^15.3.0",

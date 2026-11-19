@@ -1,0 +1,13 @@
+{
+  "metadata": {
+    "schemaName": "wknd-hero",
+    "title": "Trip hero (default)"
+  },
+  "data": {
+    "subtitle": "Picked for you",
+    "title": "{{profile.name}}, your next adventure is calling",
+    "description": "Hand-picked trips for {{profile.interest}}, starting close to {{profile.location}}. Field-tested routes, local guides and permits handled.",
+    "ctaLabel": "See trips for me",
+    "image": "https://publish-p153659-e1614585.adobeaemcloud.com/content/dam/wknd-universal/en/adventures/hero-image.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg"
+  }
+}

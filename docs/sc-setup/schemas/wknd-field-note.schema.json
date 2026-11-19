@@ -1,0 +1,12 @@
+{
+  "title": "WKND field note",
+  "description": "A short field dispatch shown in the Field Notes grid.",
+  "type": "object",
+  "required": ["headline"],
+  "properties": {
+    "headline": { "type": "string", "title": "Headline", "maxLength": 100 },
+    "main": { "type": "string", "title": "Body", "maxLength": 400, "x-semantic-type": "long-text" },
+    "image": { "type": "string", "title": "Image URL", "pattern": "^https://" },
+    "imageAlt": { "type": "string", "title": "Image alt text", "maxLength": 160 }
+  }
+}

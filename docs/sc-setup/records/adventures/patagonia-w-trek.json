@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "schemaName": "wknd-adventure",
+    "title": "Patagonia W Trek"
+  },
+  "data": {
+    "pretitle": "Expedition · 6 days",
+    "headline": "Walk the W Circuit in Torres del Paine",
+    "detail": "Granite towers, glacier lakes and refugio nights. Our field-tested route covers permits, wind windows and what to pack for four seasons in a day.",
+    "callToAction": "Plan this trek",
+    "ctaUrl": "https://wknd-adventures.com/blog/patagonia-trek",
+    "image": "https://publish-p153659-e1614585.adobeaemcloud.com/content/dam/wknd-universal/en/adventures/trekking-adventure.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+    "imageAlt": "Walk the W Circuit in Torres del Paine",
+    "layout": "featured",
+    "alert": "/wknd-next/alerts/torres-del-paine-trail-status",
+    "order": 1
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "schemaName": "wknd-persona",
+    "title": "Alex — Trekker"
+  },
+  "data": {
+    "name": "Alex",
+    "label": "Trekker",
+    "userName": "alex.rivera",
+    "occupation": "Product designer",
+    "interest": "long-distance trekking",
+    "location": "Denver",
+    "age": 34,
+    "brand": "wknd"
+  }
+}

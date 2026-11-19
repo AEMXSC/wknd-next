@@ -1,0 +1,14 @@
+{
+  "title": "WKND trip hero",
+  "description": "Personalized trip hero. The record with no persona is the default; one record per persona slug overrides it. Title and description may use {{profile.name}}, {{profile.interest}} and {{profile.location}}.",
+  "type": "object",
+  "required": ["title"],
+  "properties": {
+    "persona": { "type": "string", "title": "Persona slug (empty = default)", "pattern": "^[a-z0-9-]*$" },
+    "subtitle": { "type": "string", "title": "Tag", "maxLength": 40 },
+    "title": { "type": "string", "title": "Title", "maxLength": 120 },
+    "description": { "type": "string", "title": "Description", "maxLength": 300, "x-semantic-type": "long-text" },
+    "ctaLabel": { "type": "string", "title": "Button label", "maxLength": 40 },
+    "image": { "type": "string", "title": "Banner image URL", "pattern": "^https://" }
+  }
+}

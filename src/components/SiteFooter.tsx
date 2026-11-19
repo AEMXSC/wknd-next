@@ -1,6 +1,6 @@
 // Footer using the wknd-adventures.com inverse footer (footer / inverse-footer
 // / footer-logo from wknd-shared.css) with the demo note.
-export default function SiteFooter() {
+export default function SiteFooter({ editable }: { editable: boolean }) {
   return (
     <footer className="footer inverse-footer">
       <div className="container">
@@ -16,8 +16,10 @@ export default function SiteFooter() {
         <div className="footer-bottom">
           <p className="paragraph-sm footer-tagline">
             Demonstration experience for Adobe demo purposes only. Hero, personas, adventures,
-            field notes and trail alerts are delivered live from AEM Content Fragments and are
-            editable in Universal Editor.
+            field notes and trail alerts are delivered live from{' '}
+            {editable
+              ? 'AEM Content Fragments and are editable in Universal Editor.'
+              : 'AEM Edge Delivery structured content and are edited in Document Authoring.'}
           </p>
         </div>
       </div>

@@ -1,9 +1,9 @@
-import { getAemConfig } from '@/lib/aem-config';
+import { getAemConfig, type ScTier } from '@/lib/aem-config';
 import type { Article, Offer } from '@/lib/aem-client';
 import {
-  getAdventures, getAlerts, getFieldNotes, getHero, getPersonas, variationKey,
-  type AlertCF, type HeroCF, type HeroSet, type PersonaCF,
+  variationKey, type AlertCF, type HeroCF, type HeroSet, type PersonaCF,
 } from '@/lib/cf-delivery';
+import { contentLoaders } from '@/lib/content';
 import Masthead from '@/components/Masthead';
 import TripHero from '@/components/TripHero';
 import MyTrip, { BOOKED_TRIP_SLUG } from '@/components/MyTrip';
@@ -24,11 +24,16 @@ import FocusFragment from '@/components/FocusFragment';
 //   alerts      -> alerts/*              (WKND Next Trail Alert)
 // The trip figures (dates, checklist) are the app shell.
 //
+// CONTENT_SOURCE=sc reads the same five types from AEM EDS / DA structured
+// content instead (src/lib/sc-delivery.ts, records under /wknd-next/*), with
+// the same shapes; the CF-only Universal Editor bindings are left off.
+//
 // Query params:
 //   ?persona=<slug>                   persona switcher
 //   ?cf=<path>&variation=<name>       the CF editor's "open in app" link (model
 //                                     preview URL pattern): selects the matching
 //                                     persona / hero variation and highlights it
+//   ?tier=preview                     sc mode: read previewed (unpublished) records
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 export const fetchCache = 'force-no-store';
@@ -70,16 +75,20 @@ function select(
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ persona?: string; cf?: string; variation?: string }>;
+  searchParams: Promise<{ persona?: string; cf?: string; variation?: string; tier?: string }>;
 }) {
   const config = getAemConfig();
   const params = await searchParams;
+  const tier: ScTier = params.tier === 'preview' || params.tier === 'live' ? params.tier : config.sc.tier;
+  const load = contentLoaders(config, tier);
+  const editable = config.source === 'cf';
+  const liveLabel = editable ? 'Live from AEM' : 'Live from AEM EDS';
   const [heroSet, personas, adventures, notes, alerts] = await Promise.all([
-    safe<HeroSet | null>('getHero', () => getHero(config), null),
-    safe<readonly PersonaCF[]>('getPersonas', () => getPersonas(config), []),
-    safe<readonly Offer[]>('getAdventures', () => getAdventures(config), []),
-    safe<readonly Article[]>('getFieldNotes', () => getFieldNotes(config), []),
-    safe<readonly AlertCF[]>('getAlerts', () => getAlerts(config), []),
+    safe<HeroSet | null>('hero', load.hero, null),
+    safe<readonly PersonaCF[]>('personas', load.personas, []),
+    safe<readonly Offer[]>('adventures', load.adventures, []),
+    safe<readonly Article[]>('fieldNotes', load.fieldNotes, []),
+    safe<readonly AlertCF[]>('alerts', load.alerts, []),
   ]);
 
   const { active, hero } = select(heroSet, personas, params);
@@ -89,21 +98,21 @@ export default async function Home({
     <>
       <LiveRefresh />
       <FocusFragment path={params.cf ?? ''} />
-      <Masthead name={name} initials={name.slice(0, 1).toUpperCase()} />
-      {hero ? <TripHero hero={hero} personas={personas} active={active} /> : null}
-      <MyTrip trip={adventures.find((a) => a._path?.endsWith(`/${BOOKED_TRIP_SLUG}`))} alerts={alerts} name={name} publish={config.publish} />
-      <TrailAlerts alerts={alerts} />
-      <AdventuresSection offers={adventures} alerts={alerts} publish={config.publish} />
+      <Masthead name={name} initials={name.slice(0, 1).toUpperCase()} liveLabel={liveLabel} />
+      {hero ? <TripHero hero={hero} personas={personas} active={active} editable={editable} /> : null}
+      <MyTrip trip={adventures.find((a) => a._path?.endsWith(`/${BOOKED_TRIP_SLUG}`))} alerts={alerts} name={name} publish={config.publish} editable={editable} />
+      <TrailAlerts alerts={alerts} editable={editable} liveLabel={editable ? 'Updated from AEM' : 'Updated from AEM EDS'} />
+      <AdventuresSection offers={adventures} alerts={alerts} publish={config.publish} editable={editable} />
       <section className="section secondary-section" id="field-notes">
         <div className="container">
           <div className="section-heading">
             <h2 className="h2-heading">Field Notes</h2>
             <a className="text-button" href="https://wknd-adventures.com/field-notes">All field notes</a>
           </div>
-          <InsightsGrid articles={notes} />
+          <InsightsGrid articles={notes} editable={editable} />
         </div>
       </section>
-      <SiteFooter />
+      <SiteFooter editable={editable} />
     </>
   );
 }
