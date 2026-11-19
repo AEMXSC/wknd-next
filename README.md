@@ -130,7 +130,7 @@ The layout is responsive: the nav collapses and the cards stack.
   - Outside UE the attributes are inert.
 - **Images** use the AEM `cq5dam.web.1280` rendition, because the DAM originals are 1–2 MB.
 - **Configuration** is read only in `src/lib/aem-config.ts`. All values are optional and default to the XSC Showcase.
-- **Brand:** WKND Instrument Sans + Syncopate (self-hosted in `public/fonts`), with tokens in `src/styles/tokens.css`. These were taken from the wknd-adventures EDS site.
+- **Brand:** the app links the **wknd-adventures.com stylesheet itself**: `public/styles/wknd-shared.css`, copied verbatim from the `AEMXSC/wknd-adventures` EDS repo (`styles/wknd-shared.css`), with its Instrument Sans and Syncopate fonts in `public/fonts`. Components use the site's own markup and classes (`navbar`, `logo`, `hero-section`, `tag`, `accent-button`, `button--ghost`, `featured-article`, `article-card`, `inverse-footer`). `src/app/globals.css` only adds the app-specific pieces, built on the site's tokens.
 
 ---
 
@@ -241,7 +241,7 @@ done   # expect 1, 3, 5, 3, 3
 
 ## Customizing
 
-- **Rebrand:** edit `src/styles/tokens.css` (colors, fonts, radii) and swap the fonts in `public/fonts`.
+- **Rebrand / resync with the site:** replace `public/styles/wknd-shared.css` with the latest from the wknd-adventures repo. For another customer, drop in their site stylesheet and fonts the same way, and map the component classes. Don't restyle by hand.
 - **Add a persona:** create a Persona fragment. Optionally add a hero variation whose title normalizes to the persona's slug (e.g. "Jo Climber" → `jo-climber`). No code change is needed.
 - **Feature a different adventure:** set its Card layout to Featured. The first adventure in `ADVENTURE_ORDER` (`src/lib/cf-delivery.ts`) is the booked trip in My Trip.
 - **New content type:** add a fetcher in `cf-delivery.ts` and a component with `data-aue-*` bindings, then add it to `page.tsx`.
@@ -255,7 +255,7 @@ src/
   app/
     layout.tsx               UE connection meta + cors.js, fonts
     page.tsx                 fetches all CF folders; persona / variation / ?cf= selection
-    globals.css              all app styles (uses tokens.css)
+    globals.css              app-only styles (persona switcher, My Trip, alerts) on the site tokens
     api/graphql/[...q]/      generic AEM GraphQL proxy (unused by the page; kept for tenants that need it)
   components/
     Masthead, UserMenu       header with live badge and member menu
@@ -271,7 +271,10 @@ src/
     cf-delivery.ts           CF Delivery API reads, variations, image renditions, UE resource URNs
     personalize.ts           {{profile.*}} token resolution
     aem-client.ts            shared content types + image helper
-  styles/tokens.css          WKND brand tokens
+  styles/tokens.css          app aliases over the site tokens
+public/
+  styles/wknd-shared.css     wknd-adventures.com stylesheet, verbatim
+  fonts/                     Instrument Sans, Syncopate
 docs/
   aem-setup/                 models.json, fragments.json, templates/*.html
   screenshots/

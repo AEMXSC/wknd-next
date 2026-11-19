@@ -34,7 +34,7 @@ export default function UserMenu({ name, initials }: { name: string; initials: s
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
-        <span className="avatar">{initials}</span>
+        <span className="user-avatar">{initials}</span>
         <span className="uname">{name}</span>
         <span className="caret" aria-hidden="true">▾</span>
       </button>

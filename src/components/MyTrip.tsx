@@ -26,18 +26,18 @@ export default function MyTrip({
   const img = imageUrl(trip?.heroImage, publish, 600);
   const alert = trip?.alertPath ? alerts.find((a) => a.path === trip.alertPath) : undefined;
   return (
-    <section className="mytrip" id="my-trip">
-      <div className="wrap">
-        <p className="greet">Welcome back, <strong>{name}</strong></p>
+    <section className="secondary-section mytrip" id="my-trip">
+      <div className="container">
+        <p className="greet paragraph-lg">Welcome back, <strong>{name}</strong></p>
         <div className="trip-grid">
-          <article className="panel trip-main">
+          <article className="card panel trip-main">
             {img ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img className="trip-img" src={img} alt="" />
             ) : null}
             <div className="trip-info">
-              <p className="tag">Your next trip</p>
-              <h2 className="trip-name">{trip?.headline ?? 'Plan your next trip'}</h2>
+              <div><span className="tag">Your next trip</span></div>
+              <h2 className="h4-heading trip-name">{trip?.headline ?? 'Plan your next trip'}</h2>
               <p className="trip-meta">Jan 12 – Jan 17 · Puerto Natales, Chile · Guide: Camila R.</p>
               <div className="countdown">
                 <div><strong>55</strong><span>days</span></div>
@@ -47,7 +47,7 @@ export default function MyTrip({
             </div>
           </article>
 
-          <article className="panel">
+          <article className="card panel">
             <h3 className="panel-h">Pre-trip checklist</h3>
             <ul className="checklist">
               {CHECKLIST.map((c) => (
@@ -59,7 +59,7 @@ export default function MyTrip({
             </ul>
           </article>
 
-          <article className="panel">
+          <article className="card panel">
             <h3 className="panel-h">Permit status</h3>
             <p className="permit ok">Park entry · Confirmed</p>
             <p className="permit ok">Refugios · 4 of 4 booked</p>
@@ -73,7 +73,7 @@ export default function MyTrip({
                 <span data-aue-prop="termsReference" data-aue-type="text" data-aue-label="title">{alert.title}</span>
               </p>
             ) : null}
-            <a className="link" href="#alerts-h">See live trail alerts &rarr;</a>
+            <a className="text-button" href="#alerts">See live trail alerts</a>
           </article>
         </div>
       </div>

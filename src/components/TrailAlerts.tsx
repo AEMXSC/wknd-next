@@ -1,17 +1,17 @@
 import { aueResource, type AlertCF } from '@/lib/cf-delivery';
 
-// Trail & permit alerts: WKND Next Trail Alert Content Fragments, live
-// ranger notices (wknd-next/en/alerts). This is the demo's "edit once,
-// every surface updates" moment: change an alert in Universal Editor or the CF
-// editor, publish, and LiveRefresh picks it up within seconds.
+// Trail & permit alerts: WKND Next Trail Alert Content Fragments, live ranger
+// notices (wknd-next/en/alerts). This is the demo's "edit once, every surface
+// updates" moment: change an alert in Universal Editor or the CF editor,
+// publish, and LiveRefresh picks it up within seconds.
 export default function TrailAlerts({ alerts }: { alerts: readonly AlertCF[] }) {
   if (!alerts.length) return null;
   return (
-    <section className="alerts" aria-labelledby="alerts-h">
-      <div className="wrap">
-        <div className="section-head">
-          <h2 className="h2" id="alerts-h">Trail &amp; permit alerts</h2>
-          <span className="live"><span className="live-dot" /> Updated from AEM</span>
+    <section className="section alerts" id="alerts" aria-labelledby="alerts-h">
+      <div className="container">
+        <div className="section-heading">
+          <h2 className="h2-heading" id="alerts-h">Trail &amp; permit alerts</h2>
+          <span className="live live--light"><span className="live-dot" /> Updated from AEM</span>
         </div>
         <ul className="alert-list">
           {alerts.map((a) => (

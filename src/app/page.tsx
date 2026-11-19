@@ -94,9 +94,12 @@ export default async function Home({
       <MyTrip trip={adventures[0]} alerts={alerts} name={name} publish={config.publish} />
       <TrailAlerts alerts={alerts} />
       <AdventuresSection offers={adventures} alerts={alerts} publish={config.publish} />
-      <section className="section section-alt" id="field-notes">
-        <div className="wrap">
-          <h2 className="h2">Field Notes</h2>
+      <section className="section secondary-section" id="field-notes">
+        <div className="container">
+          <div className="section-heading">
+            <h2 className="h2-heading">Field Notes</h2>
+            <a className="text-button" href="https://wknd-adventures.com/field-notes">All field notes</a>
+          </div>
           <InsightsGrid articles={notes} />
         </div>
       </section>

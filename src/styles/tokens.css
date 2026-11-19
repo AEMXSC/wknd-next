@@ -1,55 +1,19 @@
 /*
- * WKND Adventures brand skin. Palette, fonts and shape extracted from the
- * wknd-adventures EDS site (styles/wknd-shared.css). Fonts are self-hosted from
- * /public/fonts, copied from the wknd-adventures repo.
+ * App-level aliases over the WKND Adventures design tokens. The real tokens,
+ * @font-face rules (Instrument Sans + Syncopate) and component styles come from
+ * public/styles/wknd-shared.css, copied verbatim from the wknd-adventures EDS
+ * repo and linked in app/layout.tsx. This file only adds the few values the
+ * app-specific components (persona switcher, My Trip, alerts) need.
  */
 
-@font-face {
-  font-family: "Instrument Sans";
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url("/fonts/instrument-sans-latin.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Syncopate";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/syncopate-400-latin.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Syncopate";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/syncopate-700-latin.woff2") format("woff2");
-}
-
 :root {
-  --brand-ink: #0f1a14;
-  --brand-bg: #ffffff;
-  --brand-cream: #f5f0e8;
-  --brand-surface: #f0ece4;
-  --brand-border: #ddd8cf;
-  --brand-muted: #7a8a80;
-  --brand-ink-soft: #3d4f45;
-  --brand-amber: #e8651a;          /* fills, badges, buttons */
-  --brand-amber-text: #b4500f;     /* small amber text on light backgrounds (WCAG AA) */
+  --brand-ink: var(--color-black, #0f1a14);
+  --brand-cream: var(--color-cream, #f5f0e8);
+  --brand-surface: var(--color-gray-100, #f0ece4);
+  --brand-border: var(--color-gray-200, #ddd8cf);
+  --brand-muted: var(--color-gray-500, #7a8a80);
+  --brand-ink-soft: var(--color-gray-700, #3d4f45);
+  --brand-amber: var(--color-amber, #e8651a);
+  --brand-amber-text: #b4500f; /* small amber text on light backgrounds (WCAG AA) */
   --brand-ok: #2f7a4f;
-
-  --font-heading: "Syncopate", sans-serif;
-  --font-body: "Instrument Sans", sans-serif;
-
-  --radius: 0.5rem;
-  --radius-card: 1.25rem;
-  --shadow-button: 4px 4px 0 0 var(--brand-ink);
-  --maxw: 1200px;
-  --pad: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  :root { --pad: 1rem; }
 }

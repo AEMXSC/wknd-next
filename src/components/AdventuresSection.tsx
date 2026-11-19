@@ -3,10 +3,42 @@ import { aueResource, type AlertCF } from '@/lib/cf-delivery';
 
 // "Adventures for you": WKND Next Adventure Content Fragments (wknd-next/en/adventures)
 // read through the CF Delivery API. Authors control the card from the CF:
-//   layout          'featured' -> large card spanning two columns
+//   layout          'featured' -> the wknd-adventures.com featured-article block
 //   ctaUrl          where the call to action goes
 //   termsConditions a referenced Trail Alert CF, shown inside the card and
 //                   editable in place (it carries its own UE binding)
+// Markup uses the site's featured-article and article-card classes.
+
+function LinkedAlert({ alert }: { alert: AlertCF }) {
+  return (
+    <div
+      className="adv-alert"
+      data-aue-resource={aueResource(alert.path)}
+      data-aue-type="component"
+      data-aue-label={`Linked alert: ${alert.title}`}
+    >
+      <span className="alert-icon" aria-hidden="true">!</span>
+      <span data-aue-prop="termsReference" data-aue-type="text" data-aue-label="title">{alert.title}</span>
+    </div>
+  );
+}
+
+function Cta({ o, className }: { o: Offer; className: string }) {
+  return (
+    <a
+      className={className}
+      href={o.ctaUrl || '#book'}
+      target={o.ctaUrl ? '_blank' : undefined}
+      rel={o.ctaUrl ? 'noopener' : undefined}
+      data-aue-prop="callToAction"
+      data-aue-type="text"
+      data-aue-label="call to action"
+    >
+      {o.callToAction}
+    </a>
+  );
+}
+
 export default function AdventuresSection({
   offers,
   alerts,
@@ -18,59 +50,72 @@ export default function AdventuresSection({
 }) {
   if (!offers.length) return null;
   const alertByPath = new Map(alerts.map((a) => [a.path, a]));
+  const alertFor = (o: Offer) => (o.alertPath ? alertByPath.get(o.alertPath) : undefined);
+  const featured = offers.filter((o) => o.layout === 'featured');
+  const standard = offers.filter((o) => o.layout !== 'featured');
+
   return (
     <section className="section" id="adventures">
-      <div className="wrap">
-        <div className="section-head">
-          <h2 className="h2">Adventures for you</h2>
-          <a className="link" href="https://wknd-adventures.com/adventures">All adventures &rarr;</a>
+      <div className="container">
+        <div className="section-heading">
+          <h2 className="h2-heading">Adventures for you</h2>
+          <a className="text-button" href="https://wknd-adventures.com/adventures">All adventures</a>
         </div>
-        <div className="adv-grid">
-          {offers.map((o) => {
-            const featured = o.layout === 'featured';
-            const img = imageUrl(o.heroImage, publish, featured ? 1200 : 800);
-            const alert = o.alertPath ? alertByPath.get(o.alertPath) : undefined;
+
+        {featured.map((o) => {
+          const img = imageUrl(o.heroImage, publish, 1200);
+          const alert = alertFor(o);
+          return (
+            <article
+              key={o._path}
+              className="featured-article adv-featured"
+              data-aue-resource={aueResource(o._path ?? '')}
+              data-aue-type="component"
+              data-aue-label={`Adventure: ${o.headline ?? ''}`}
+            >
+              {img ? (
+                <div className="featured-article-image">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={img} alt={o.headline ?? ''} data-aue-prop="heroImage" data-aue-type="media" data-aue-label="image" />
+                </div>
+              ) : null}
+              <div className="adv-featured-body">
+                <span className="tag" data-aue-prop="pretitle" data-aue-type="text" data-aue-label="pretitle">{o.pretitle}</span>
+                <h3 className="h2-heading" data-aue-prop="headline" data-aue-type="text" data-aue-label="headline">{o.headline}</h3>
+                <p className="paragraph-lg utility-text-secondary" data-aue-prop="detail" data-aue-type="richtext" data-aue-label="detail">{o.detail?.plaintext}</p>
+                {alert ? <LinkedAlert alert={alert} /> : null}
+                <div className="button-group">
+                  <Cta o={o} className="accent-button" />
+                </div>
+              </div>
+            </article>
+          );
+        })}
+
+        <div className={`grid-layout grid-gap-lg ${standard.length % 3 === 0 ? "desktop-3-column" : ""}`}>
+          {standard.map((o) => {
+            const img = imageUrl(o.heroImage, publish, 800);
+            const alert = alertFor(o);
             return (
               <article
                 key={o._path}
-                className={`adv-card ${featured ? 'adv-card--featured' : ''}`}
+                className="article-card"
                 data-aue-resource={aueResource(o._path ?? '')}
                 data-aue-type="component"
                 data-aue-label={`Adventure: ${o.headline ?? ''}`}
               >
                 {img ? (
-                  <div className="adv-media">
+                  <div className="article-card-image">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={img} alt={o.headline ?? ''} loading="lazy" data-aue-prop="heroImage" data-aue-type="media" data-aue-label="image" />
-                    {featured ? <span className="adv-badge">Featured</span> : null}
                   </div>
                 ) : null}
-                <div className="adv-body">
-                  <p className="tag" data-aue-prop="pretitle" data-aue-type="text" data-aue-label="pretitle">{o.pretitle}</p>
-                  <h3 className="adv-title" data-aue-prop="headline" data-aue-type="text" data-aue-label="headline">{o.headline}</h3>
-                  <p className="adv-text" data-aue-prop="detail" data-aue-type="richtext" data-aue-label="detail">{o.detail?.plaintext}</p>
-                  {alert ? (
-                    <div
-                      className="adv-alert"
-                      data-aue-resource={aueResource(alert.path)}
-                      data-aue-type="component"
-                      data-aue-label={`Linked alert: ${alert.title}`}
-                    >
-                      <span className="alert-icon" aria-hidden="true">!</span>
-                      <span data-aue-prop="termsReference" data-aue-type="text" data-aue-label="title">{alert.title}</span>
-                    </div>
-                  ) : null}
-                  <a
-                    className="btn btn-sm"
-                    href={o.ctaUrl || '#book'}
-                    target={o.ctaUrl ? '_blank' : undefined}
-                    rel={o.ctaUrl ? 'noopener' : undefined}
-                    data-aue-prop="callToAction"
-                    data-aue-type="text"
-                    data-aue-label="call to action"
-                  >
-                    {o.callToAction}
-                  </a>
+                <div className="article-card-body">
+                  <div><span className="tag" data-aue-prop="pretitle" data-aue-type="text" data-aue-label="pretitle">{o.pretitle}</span></div>
+                  <h3 className="h4-heading" data-aue-prop="headline" data-aue-type="text" data-aue-label="headline">{o.headline}</h3>
+                  <p className="paragraph-sm utility-text-secondary" data-aue-prop="detail" data-aue-type="richtext" data-aue-label="detail">{o.detail?.plaintext}</p>
+                  {alert ? <LinkedAlert alert={alert} /> : null}
+                  <div><Cta o={o} className="text-button" /></div>
                 </div>
               </article>
             );

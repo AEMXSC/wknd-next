@@ -36,6 +36,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* The WKND Adventures site stylesheet, copied verbatim from the
+            AEMXSC/wknd-adventures EDS repo (styles/wknd-shared.css), so the app
+            uses the brand's real tokens, type, buttons, cards and nav. App-only
+            pieces live in globals.css on top of it. */}
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
+        <link rel="stylesheet" href="/styles/wknd-shared.css" />
         {fontKit ? (
           <link rel="stylesheet" href={`https://use.typekit.net/${fontKit}.css`} />
         ) : null}
