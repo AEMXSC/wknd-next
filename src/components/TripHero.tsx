@@ -31,7 +31,9 @@ export default function TripHero({
     setInEditor(window.self !== window.top);
   }, []);
 
-  const show = (text: string) => (inEditor ? text : resolveTokens(text, active));
+  // Raw tokens only inside Universal Editor (cf mode). Other iframes, such as
+  // DA Studio's channel preview in sc mode, show the resolved copy.
+  const show = (text: string) => (inEditor && editable ? text : resolveTokens(text, active));
 
   return (
     <section
