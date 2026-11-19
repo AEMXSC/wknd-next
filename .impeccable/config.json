@@ -26,6 +26,51 @@
         ],
         "createdAt": "2026-11-19T01:16:21.905Z",
         "reason": "customer brand stylesheet copied verbatim from AEMXSC/wknd-adventures; must not be edited (user asked for the exact site stylesheet)"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/aem-setup/templates/wknd-next-hero.html"
+        ],
+        "createdAt": "2026-11-19T02:03:46.761Z",
+        "reason": "matches wknd-adventures.com brand exactly (white-on-amber .tag, gray-500 .utility-text-secondary); user asked templates to match the site"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/aem-setup/templates/wknd-next-adventure.html"
+        ],
+        "createdAt": "2026-11-19T02:03:47.042Z",
+        "reason": "matches wknd-adventures.com brand exactly (white-on-amber .tag, gray-500 .utility-text-secondary); user asked templates to match the site"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/aem-setup/templates/wknd-next-field-note.html"
+        ],
+        "createdAt": "2026-11-19T02:03:47.310Z",
+        "reason": "matches wknd-adventures.com brand exactly (white-on-amber .tag, gray-500 .utility-text-secondary); user asked templates to match the site"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/aem-setup/templates/wknd-next-trail-alert.html"
+        ],
+        "createdAt": "2026-11-19T02:03:47.578Z",
+        "reason": "matches wknd-adventures.com brand exactly (white-on-amber .tag, gray-500 .utility-text-secondary); user asked templates to match the site"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/aem-setup/templates/wknd-next-persona.html"
+        ],
+        "createdAt": "2026-11-19T02:03:47.865Z",
+        "reason": "matches wknd-adventures.com brand exactly (white-on-amber .tag, gray-500 .utility-text-secondary); user asked templates to match the site"
       }
     ]
   }

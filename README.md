@@ -49,6 +49,10 @@ About 5 minutes. Each step is one AEM capability.
 - **Persona switcher:** the "Viewing as" chips are links to `?persona=<slug>`. Each chip is bound to its Persona fragment in UE.
 - **Inside Universal Editor** the raw tokens are shown, and edits land on the variation currently shown.
 
+In the CF editor, the hero fragment shows **Main** plus the **Maya Surfer** and **Sam Cyclist** variations. The tokens are typed straight into the fields:
+
+![Hero fragment with persona variations in the CF editor](docs/screenshots/cf-editor-hero-variations.png)
+
 ### My Trip dashboard
 
 ![My Trip](docs/screenshots/my-trip.jpg)
@@ -65,9 +69,13 @@ Five *WKND Next Adventure* fragments. Authors control each card from three field
 
 | Field | Effect in the app |
 |---|---|
-| **Card layout** (Featured / Standard) | Featured spans two columns, with a badge and a larger image. |
+| **Card layout** (Featured / Standard) | Featured renders as the site's large featured-story block (image beside the copy). Standard renders as an article card. |
 | **Booking page URL** | Where the call-to-action button goes (the matching wknd-adventures.com story). |
 | **Trail alert** (fragment reference) | Shows the referenced alert inside the card, editable in place. |
+
+The same fields in the CF editor (*WKND Next Adventure* model):
+
+![Adventure fragment fields in the CF editor](docs/screenshots/cf-editor-adventure.png)
 
 ### Trail & permit alerts, live
 
@@ -96,7 +104,13 @@ https://wknd-next.vercel.app/?cf=${contentFragment.path}&variation=${contentFrag
 
 ### Visual Content Fragment templates
 
-Each model has one branded HTML template. The sources are in `docs/aem-setup/templates/`. Each one renders an **"Open in WKND app"** link built from `{{properties.path}}`. The adventure template also shows the Featured badge, the booking link, and the **referenced trail alert** (via `referencedFragments`).
+Each model has one HTML template styled like wknd-adventures.com: pill tags and buttons, Syncopate headings, the site's card radii and hero overlay. The fonts load from `wknd-adventures.com/fonts`, which allows cross-origin requests. The sources are in `docs/aem-setup/templates/`.
+- Each template renders an **"Open in WKND app"** link built from `{{properties.path}}`.
+- The adventure template switches between the featured-story layout and the article card based on **Card layout**, and shows the booking link and the **referenced trail alert** (via `referencedFragments`).
+
+Pick a template from **HTML Template** in the fragment's preview. Once the fragment is published, its **Preview URL** and **Publish URL** are the standalone HTML renders any channel can embed:
+
+![HTML template preview in the CF editor](docs/screenshots/cf-editor-template-preview.jpg)
 
 ### Mobile
 
@@ -210,9 +224,10 @@ With the **AEM MCP server** connected to your sandbox, open this repo in Claude 
 4. **Folders.** Create `AEM_DAM_ROOT` (e.g. `/content/dam/wknd-next/en`) with `promotions`, `personas`, `adventures`, `field-notes` and `alerts`. In the folder's *Properties → Cloud Services*, select your configuration so the models show up in the Create dialog.
 5. **Fragments.** Create each fragment from [`fragments.json`](docs/aem-setup/fragments.json) with the given folder, name and model.
    - Set the **Trail alert** on Patagonia to `alerts/torres-del-paine-trail-status`.
-   - On `promotions/trip-hero`, add the variations **Maya Surfer** and **Sam Cyclist**. The titles must match the persona slugs.
+   - On `promotions/trip-hero`, add the variations **Maya Surfer** and **Sam Cyclist** with the **+** next to *Variations*. The titles must match the persona slugs. It should look like the [hero variations screenshot](docs/screenshots/cf-editor-hero-variations.png).
+   - On each adventure, set **Card layout**, **Booking page URL** and (for Patagonia) **Trail alert**, as in the [adventure fields screenshot](docs/screenshots/cf-editor-adventure.png).
 6. **Templates.** On each model, add the matching HTML template from [`docs/aem-setup/templates/`](docs/aem-setup/templates), with `<YOUR_APP_URL>` replaced.
-7. **Publish** all fragments (Publish + Preview). Then open a fragment in the CF editor, pick its template and check the Preview/Publish URLs.
+7. **Publish** all fragments (Publish + Preview). Then open a fragment's preview, pick its template under **HTML Template**, and check that the Preview/Publish URLs are filled in (see the [template preview screenshot](docs/screenshots/cf-editor-template-preview.jpg)).
 8. **Deploy the app.** Fork or clone the repo, import it at [vercel.com/new](https://vercel.com/new), set `AEM_AUTHOR`, `AEM_PUBLISH` and `AEM_DAM_ROOT`, then deploy. Every push to `main` redeploys.
 9. **Universal Editor.** Open `https://experience.adobe.com/#/@<your-org>/aem/editor/canvas/<your-app-host>/`. The app's connection meta points UE at your author. Click any card to edit.
 

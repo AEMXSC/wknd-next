@@ -1,26 +1,39 @@
+<meta charset="utf-8">
 <style>
-  .wk { font-family: "Instrument Sans", Arial, sans-serif; color: #0f1a14; max-width: 980px; margin: 0 auto; }
-  .wk-hero { position: relative; min-height: 380px; display: flex; flex-direction: column; justify-content: flex-end; border-radius: 20px; overflow: hidden; background: #0f1a14; color: #fff; }
+  @font-face { font-family: "Instrument Sans"; font-weight: 400 700; font-display: swap; src: url(https://wknd-adventures.com/fonts/instrument-sans-latin.woff2) format("woff2"); }
+  @font-face { font-family: "Syncopate"; font-weight: 400; font-display: swap; src: url(https://wknd-adventures.com/fonts/syncopate-400-latin.woff2) format("woff2"); }
+  @font-face { font-family: "Syncopate"; font-weight: 700; font-display: swap; src: url(https://wknd-adventures.com/fonts/syncopate-700-latin.woff2) format("woff2"); }
+  .wk { --black: #0f1a14; --amber: #e8651a; --cream: #f5f0e8; --g200: #ddd8cf; --g700: #3d4f45; font-family: "Instrument Sans", sans-serif; color: var(--black); line-height: 1.6; max-width: 1100px; margin: 0 auto; -webkit-font-smoothing: antialiased; }
+  .wk * { box-sizing: border-box; }
+  .wk h2 { font-family: Syncopate, sans-serif; font-weight: 700; line-height: 1.1; margin: 0; }
+  .wk p { margin: 0; }
+  .wk-tag { display: inline-flex; align-items: center; background: var(--amber); color: #fff; border-radius: 9999px; font-family: Syncopate, sans-serif; font-size: .65rem; font-weight: 600; letter-spacing: .05em; padding: .3125rem .5rem .1875rem; text-shadow: none; }
+  .wk-hero { position: relative; min-height: 440px; display: flex; align-items: center; border-radius: 1.25rem; overflow: hidden; background: var(--black); color: #fff; }
   .wk-hero-bg { position: absolute; inset: 0; }
   .wk-hero-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .wk-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,26,20,.1) 30%, rgba(15,26,20,.85)); }
-  .wk-hero-body { position: relative; z-index: 1; padding: 32px; }
-  .wk-eyebrow { display: inline-block; background: #e8651a; color: #0f1a14; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; margin: 0 0 12px; }
-  .wk-title { font-family: Syncopate, Arial, sans-serif; font-weight: 700; font-size: 34px; line-height: 1.1; text-transform: uppercase; margin: 0; max-width: 18ch; }
-  .wk-desc { font-size: 17px; line-height: 1.5; margin: 14px 0 20px; max-width: 56ch; opacity: .92; }
-  .wk-btn { display: inline-block; padding: 12px 22px; background: #e8651a; color: #0f1a14; border: 2px solid #0f1a14; border-radius: 8px; box-shadow: 4px 4px 0 0 #0f1a14; font-weight: 700; text-decoration: none; }
-  .wk-app { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 14px; padding: 12px 16px; border: 2px solid #0f1a14; border-radius: 10px; background: #f5f0e8; font-size: 14px; }
-  .wk-app a { font-weight: 700; color: #0f1a14; }
+  .wk-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,.75) 0, rgba(0,0,0,.45) 40%, rgba(0,0,0,.25)); }
+  .wk-hero-body { position: relative; z-index: 1; padding: 2.5rem; max-width: 52rem; text-shadow: 0 1px 3px rgba(0,0,0,.35); }
+  .wk-hero h2 { font-size: 2.5rem; letter-spacing: -.02em; margin: 1rem 0; }
+  .wk-lead { font-size: 1.25rem; color: hsla(0,0%,100%,.85); max-width: 38rem; margin-bottom: 1.5rem !important; }
+  .wk-buttons { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .wk-btn { display: inline-flex; align-items: center; justify-content: center; border: 2px solid var(--amber); border-radius: 9999px; background: var(--amber); color: var(--black); box-shadow: 3px 3px 0 0 var(--black); font-family: Syncopate, sans-serif; font-size: .875rem; font-weight: 700; letter-spacing: .07em; line-height: 1; padding: .75rem 2rem; text-decoration: none; white-space: nowrap; text-shadow: none; }
+  .wk-btn--ghost { background: transparent; border-color: hsla(0,0%,100%,.5); color: #fff; box-shadow: 3px 3px 0 0 var(--black); }
+  .wk-app { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 1rem; padding: .75rem .25rem; border-top: 1px solid var(--g200); font-size: .875rem; color: var(--g700); }
+  .wk-link { font-family: Syncopate, sans-serif; font-size: .875rem; font-weight: 700; letter-spacing: .06em; color: var(--black); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+  @media (max-width: 640px) { .wk-hero h2 { font-size: 1.75rem; } .wk-hero-body { padding: 1.5rem; } }
 </style>
 <div class="wk">
   <section class="wk-hero">
-    {{#fields.bannerimage}}<div class="wk-hero-bg">{{{fields.bannerimage}}}</div>{{/fields.bannerimage}}
+    {{#fields.bannerimage}}<div class="wk-hero-bg">{{{fields.bannerimage}}}<div class="wk-overlay"></div></div>{{/fields.bannerimage}}
     <div class="wk-hero-body">
-      {{#fields.subtitle}}<p class="wk-eyebrow">{{fields.subtitle}}</p>{{/fields.subtitle}}
-      <h2 class="wk-title">{{fields.title}}</h2>
-      <p class="wk-desc">{{fields.description}}</p>
-      {{#fields.ctalabel}}<span class="wk-btn">{{fields.ctalabel}}</span>{{/fields.ctalabel}}
+      {{#fields.subtitle}}<span class="wk-tag">{{fields.subtitle}}</span>{{/fields.subtitle}}
+      <h2>{{fields.title}}</h2>
+      <p class="wk-lead">{{fields.description}}</p>
+      <div class="wk-buttons">
+        {{#fields.ctalabel}}<span class="wk-btn">{{fields.ctalabel}}</span>{{/fields.ctalabel}}
+        <span class="wk-btn wk-btn--ghost">My trip</span>
+      </div>
     </div>
   </section>
-  <p class="wk-app"><span>Tokens like profile.name resolve per persona in the app.</span><a href="<YOUR_APP_URL>/?cf={{properties.path}}" target="_blank" rel="noopener">Open in WKND app &rarr;</a></p>
+  <p class="wk-app"><span>Tokens like profile.name resolve per persona in the app.</span><a class="wk-link" href="<YOUR_APP_URL>/?cf={{properties.path}}" target="_blank" rel="noopener">Open in WKND app</a></p>
 </div>
