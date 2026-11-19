@@ -24,6 +24,12 @@ export interface Offer {
   readonly detail?: { readonly plaintext?: string; readonly html?: string };
   readonly callToAction?: string;
   readonly heroImage?: CFImageRef;
+  /** 'featured' renders a large card; anything else is a standard card. */
+  readonly layout?: string;
+  /** Booking page the call to action opens (e.g. a wknd-adventures.com page). */
+  readonly ctaUrl?: string;
+  /** Path of the linked Trail Alert fragment (a CF-to-CF reference). */
+  readonly alertPath?: string;
 }
 
 /**

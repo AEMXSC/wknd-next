@@ -188,6 +188,9 @@ export async function getAdventures(config: AemConfig): Promise<readonly Offer[]
         detail: { html, plaintext: stripTags(html) },
         callToAction: first(fr, 'callToAction'),
         heroImage: { _publishUrl: damImage(config, first(fr, 'heroImage')) },
+        layout: first(fr, 'layout'),
+        ctaUrl: first(fr, 'ctaUrl'),
+        alertPath: first(fr, 'termsConditions'),
       };
     });
 }

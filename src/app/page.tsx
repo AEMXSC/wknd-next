@@ -91,9 +91,9 @@ export default async function Home({
       <FocusFragment path={params.cf ?? ''} />
       <Masthead name={name} initials={name.slice(0, 1).toUpperCase()} />
       {hero ? <TripHero hero={hero} personas={personas} active={active} /> : null}
-      <MyTrip trip={adventures[0]} name={name} publish={config.publish} />
+      <MyTrip trip={adventures[0]} alerts={alerts} name={name} publish={config.publish} />
       <TrailAlerts alerts={alerts} />
-      <AdventuresSection offers={adventures} publish={config.publish} />
+      <AdventuresSection offers={adventures} alerts={alerts} publish={config.publish} />
       <section className="section section-alt" id="field-notes">
         <div className="wrap">
           <h2 className="h2">Field Notes</h2>
