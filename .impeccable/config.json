@@ -71,6 +71,15 @@
         ],
         "createdAt": "2026-11-19T02:03:47.865Z",
         "reason": "matches wknd-adventures.com brand exactly (white-on-amber .tag, gray-500 .utility-text-secondary); user asked templates to match the site"
+      },
+      {
+        "rule": "wide-tracking",
+        "value": "*",
+        "files": [
+          "docs/aem-setup/templates/wknd-next-adventure.html"
+        ],
+        "createdAt": "2026-11-19T02:11:07.975Z",
+        "reason": "button/link label tracking (.07em/.06em) copied from wknd-adventures.com .button and .text-button; user asked templates to match the site"
       }
     ]
   }
