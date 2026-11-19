@@ -1,0 +1,18 @@
+{
+  "title": "WKND adventure",
+  "description": "A bookable adventure. Featured renders the large card; alert links a trail alert record by path.",
+  "type": "object",
+  "required": ["headline"],
+  "properties": {
+    "pretitle": { "type": "string", "title": "Tag", "maxLength": 40 },
+    "headline": { "type": "string", "title": "Headline", "maxLength": 100 },
+    "detail": { "type": "string", "title": "Detail", "maxLength": 400, "x-semantic-type": "long-text" },
+    "callToAction": { "type": "string", "title": "Call to action", "maxLength": 40 },
+    "ctaUrl": { "type": "string", "title": "Booking URL", "pattern": "^https://" },
+    "image": { "type": "string", "title": "Image URL", "pattern": "^https://" },
+    "imageAlt": { "type": "string", "title": "Image alt text", "maxLength": 160 },
+    "layout": { "type": "string", "title": "Layout", "enum": ["standard", "featured"], "default": "standard" },
+    "alert": { "type": "string", "title": "Linked trail alert (record path)", "pattern": "^(/[a-z0-9-]+)*$" },
+    "order": { "type": "number", "title": "Display order" }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "schemaName": "wknd-adventure",
+    "title": "Mont Blanc Ski Touring"
+  },
+  "data": {
+    "pretitle": "Alpine · 4 days",
+    "headline": "Skin up, ski down: the Mont Blanc massif",
+    "detail": "Hut-to-hut touring with IFMGA guides, avalanche briefings every morning and the Vallée Blanche as the finale.",
+    "callToAction": "Check conditions",
+    "ctaUrl": "https://wknd-adventures.com/blog/winter-mountaineering",
+    "image": "https://publish-p153659-e1614585.adobeaemcloud.com/content/dam/wknd-universal/en/adventures/skiing%20in%20mont%20blanc.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+    "imageAlt": "Skin up, ski down: the Mont Blanc massif",
+    "layout": "standard",
+    "order": 4
+  }
+}

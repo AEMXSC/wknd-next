@@ -1,14 +1,14 @@
 import { imageUrl, type Article } from '@/lib/aem-client';
-import { aueResource } from '@/lib/cf-delivery';
+import { binding } from '@/lib/ue';
 
 // "Field Notes": WKND Next Field Note Content Fragments (wknd-next/en/field-notes)
 // read through the CF Delivery API, rendered with the site's article-card
 // markup. UE instrumentation keeps each card editable.
-export default function InsightsGrid({ articles }: { articles: readonly Article[] }) {
+export default function InsightsGrid({ articles, editable }: { articles: readonly Article[]; editable: boolean }) {
   if (!articles.length) {
     return (
       <p className="utility-text-secondary">
-        No field notes returned. Publish the Field Note fragments in wknd-next/en/field-notes.
+        No field notes returned. Publish the field notes in AEM.
       </p>
     );
   }
@@ -21,9 +21,7 @@ export default function InsightsGrid({ articles }: { articles: readonly Article[
           <article
             key={a._path ?? a.headline}
             className="article-card"
-            data-aue-resource={aueResource(a._path ?? '')}
-            data-aue-type="component"
-            data-aue-label={`Field note: ${a.headline ?? ''}`}
+            {...binding(a._path ?? '', `Field note: ${a.headline ?? ''}`, editable)}
           >
             {img ? (
               <div className="article-card-image">

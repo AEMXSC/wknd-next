@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "schemaName": "wknd-adventure",
+    "title": "Tuscany Gravel Ride"
+  },
+  "data": {
+    "pretitle": "Cycling · 5 days",
+    "headline": "Ride the white roads of Tuscany",
+    "detail": "Strade bianche, cypress ridgelines and long lunches. Support van, e-bike option and a route built for every pace.",
+    "callToAction": "Ride with us",
+    "ctaUrl": "https://wknd-adventures.com/blog/alpine-cycling",
+    "image": "https://publish-p153659-e1614585.adobeaemcloud.com/content/dam/wknd-universal/en/adventures/cycling-in-tuscany.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+    "imageAlt": "Ride the white roads of Tuscany",
+    "layout": "standard",
+    "order": 5
+  }
+}

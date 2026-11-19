@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "schemaName": "wknd-hero",
+    "title": "Trip hero (Sam Cyclist)"
+  },
+  "data": {
+    "persona": "sam-cyclist",
+    "subtitle": "Gravel picks",
+    "title": "{{profile.name}}, the white roads are calling",
+    "description": "Hand-picked rides for {{profile.interest}}, with flights that work from {{profile.location}}. Support van, e-bike option and long lunches built in.",
+    "ctaLabel": "See cycling trips",
+    "image": "https://publish-p153659-e1614585.adobeaemcloud.com/content/dam/wknd-universal/en/adventures/cycling-in-tuscany.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "title": "WKND trail alert",
+  "description": "A live ranger or permit notice. Edit and publish to update the app and the site.",
+  "type": "object",
+  "required": ["title"],
+  "properties": {
+    "title": { "type": "string", "title": "Title", "maxLength": 80 },
+    "details": { "type": "string", "title": "Details", "maxLength": 400, "x-semantic-type": "long-text" }
+  }
+}

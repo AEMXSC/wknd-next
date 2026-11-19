@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "schemaName": "wknd-persona",
+    "title": "Sam — Cyclist"
+  },
+  "data": {
+    "name": "Sam",
+    "label": "Cyclist",
+    "userName": "sam.okafor",
+    "occupation": "Architect",
+    "interest": "gravel cycling",
+    "location": "Toronto",
+    "age": 45,
+    "brand": "wknd"
+  }
+}

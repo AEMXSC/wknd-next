@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "schemaName": "wknd-adventure",
+    "title": "Costa Rica Surf Week"
+  },
+  "data": {
+    "pretitle": "Surf · 7 days",
+    "headline": "Find your line on the Nicoya Peninsula",
+    "detail": "Warm water, consistent beach breaks and local coaches who read the tide charts for you. Dawn sessions, rainforest afternoons.",
+    "callToAction": "Book a spot",
+    "ctaUrl": "https://wknd-adventures.com/blog/surfing-costa-rica",
+    "image": "https://publish-p153659-e1614585.adobeaemcloud.com/content/dam/wknd-universal/en/adventures/san%20diego%20surf%20sports.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+    "imageAlt": "Find your line on the Nicoya Peninsula",
+    "layout": "standard",
+    "order": 2
+  }
+}

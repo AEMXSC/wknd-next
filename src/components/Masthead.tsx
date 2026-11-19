@@ -11,7 +11,7 @@ const NAV = [
 // Header using the wknd-adventures.com navbar markup and classes (navbar /
 // nav-inner / logo / nav-link from wknd-shared.css), with the member's menu in
 // place of the site's Subscribe button.
-export default function Masthead({ name, initials }: { name: string; initials: string }) {
+export default function Masthead({ name, initials, liveLabel }: { name: string; initials: string; liveLabel: string }) {
   return (
     <div className="navbar">
       <div className="container">
@@ -34,7 +34,7 @@ export default function Masthead({ name, initials }: { name: string; initials: s
             </ul>
           </nav>
           <div className="nav-right">
-            <span className="live"><span className="live-dot" /> Live from AEM</span>
+            <span className="live"><span className="live-dot" /> {liveLabel}</span>
             <UserMenu name={name} initials={initials} />
           </div>
         </div>

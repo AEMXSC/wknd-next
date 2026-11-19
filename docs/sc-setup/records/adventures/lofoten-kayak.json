@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "schemaName": "wknd-adventure",
+    "title": "Lofoten Sea Kayak"
+  },
+  "data": {
+    "pretitle": "Paddle · 6 days",
+    "headline": "Paddle the Lofoten Islands under the midnight sun",
+    "detail": "Fjord crossings, white-sand coves and wild camps above the Arctic Circle. Guided by paddlers who know every current.",
+    "callToAction": "See the route",
+    "ctaUrl": "https://wknd-adventures.com/blog/kayaking-norway",
+    "image": "https://publish-p153659-e1614585.adobeaemcloud.com/content/dam/wknd-universal/en/adventures/aloha%20spirits%20in%20northern%20norway.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+    "imageAlt": "Paddle the Lofoten Islands under the midnight sun",
+    "layout": "standard",
+    "order": 3
+  }
+}

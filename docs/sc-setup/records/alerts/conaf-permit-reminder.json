@@ -1,0 +1,10 @@
+{
+  "metadata": {
+    "schemaName": "wknd-trail-alert",
+    "title": "CONAF permit reminder"
+  },
+  "data": {
+    "title": "Permit — Park entry & refugio bookings",
+    "details": "Park entry must be purchased online before arrival. Rangers check refugio or campsite reservations at every checkpoint. Carry a printed or offline copy."
+  }
+}
