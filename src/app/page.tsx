@@ -13,6 +13,7 @@ import TrailAlerts from '@/components/TrailAlerts';
 import SiteFooter from '@/components/SiteFooter';
 import LiveRefresh from '@/components/LiveRefresh';
 import FocusFragment from '@/components/FocusFragment';
+import StudioDrafts from '@/components/StudioDrafts';
 
 // WKND member trip-companion app. Every content surface is a live Content
 // Fragment on the WKND Next models (/conf/wknd-universal), read server-side from
@@ -98,6 +99,7 @@ export default async function Home({
     <>
       <LiveRefresh />
       <FocusFragment path={params.cf ?? ''} />
+      {!editable && tier === 'preview' ? <StudioDrafts org={config.sc.org} site={config.sc.site} persona={active} /> : null}
       <Masthead name={name} initials={name.slice(0, 1).toUpperCase()} liveLabel={liveLabel} />
       {hero ? <TripHero hero={hero} personas={personas} active={active} editable={editable} /> : null}
       <MyTrip trip={adventures.find((a) => a._path?.endsWith(`/${BOOKED_TRIP_SLUG}`))} alerts={alerts} name={name} publish={config.publish} editable={editable} />
