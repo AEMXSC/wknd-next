@@ -5,6 +5,7 @@
 
 import type { Article, Offer } from './aem-client.ts';
 import { variationKey, type AlertCF, type HeroCF, type HeroSet, type PersonaCF } from './cf-delivery.ts';
+import { textToHtml } from './sc-text.ts';
 
 export interface ScRecord {
   readonly path: string;
@@ -25,19 +26,7 @@ const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v)
 const httpsUrl = (v: unknown): string => (str(v).startsWith('https://') ? str(v) : '');
 const slugOf = (path: string): string => path.split('/').pop() ?? '';
 
-function escapeHtml(text: string): string {
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-/** Long-text fields are plain text; blank lines become paragraphs, all escaped. */
-export function textToHtml(text: string): string {
-  return text
-    .split(/\n\s*\n/)
-    .map((p) => p.trim())
-    .filter(Boolean)
-    .map((p) => `<p>${escapeHtml(p).replace(/\n/g, '<br>')}</p>`)
-    .join('');
-}
+export { textToHtml };
 
 function toHero(r: ScRecord, variation: string): HeroCF {
   const d = r.data ?? {};
